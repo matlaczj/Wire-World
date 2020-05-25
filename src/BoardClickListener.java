@@ -22,7 +22,7 @@ public class BoardClickListener implements ActionListener {
 			for(int j=1; j<cols-1; j++)
 				if(command.equals(i+" "+j))
 				{
-					if(lastCommand != command)
+//					if(lastCommand != command)	-- to jest problematyczne
 						stateChangeClock = board.getCell(i, j).getState();
 					stateChangeClock++;
 					board.getCell(i,j).setState((byte)(stateChangeClock%4));

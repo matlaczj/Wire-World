@@ -48,8 +48,11 @@ public class Board {
 	}	
 	public void changeCellsSize(Dimension d) {
 		for(int i=0; i<rows; i++)
-			for(int j=0; j<cols; j++)
+			for(int j=0; j<cols; j++) {
 				board[i][j].setPreferredSize(d);
+				board[i][j].setMinimumSize(d);
+				board[i][j].setMaximumSize(d);
+			}
 	}
 	
 	public void updateBoard() {

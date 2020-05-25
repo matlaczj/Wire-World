@@ -8,7 +8,7 @@ public class LoadBoardFromFile {
 	public static Board loadBoardFromFile(String fileName) {
 		try {
 			String buffer;
-			Scanner s = new Scanner(new File("C:\\Users\\Kuba\\eclipse-workspace\\WireWorld\\src\\" + fileName)); //TU MUSISZ MIEC INNA SCIEZKE DOSTEPU -- a nie wystarczy tak?? lol. -niestety ale trzeba daæ pe³n¹
+			Scanner s = new Scanner(new File(fileName)); //TU MUSISZ MIEC INNA SCIEZKE DOSTEPU -- a nie wystarczy tak?? lol. -niestety ale trzeba daï¿½ peï¿½nï¿½
 			s.next();
 			int rows = s.nextInt()+2; //+2 dla paddingu
 			s.next();

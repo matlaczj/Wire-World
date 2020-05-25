@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.TextArea;
 import java.awt.Toolkit;
@@ -11,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -32,8 +35,6 @@ public class MainWindow {
 	private JFrame mainWindow;
 	private JPanel controlPanel;
 	private JPanel displayPanel; 
-	private JPanel leftMargin;
-	private JPanel rightMargin;
 	private Board board;
 	
 	private JButton goHomeBtn;
@@ -68,20 +69,17 @@ public class MainWindow {
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainWindow.setSize(screenSize);
 		mainWindow.setMaximumSize(screenSize);
-		mainWindow.setLayout(new BorderLayout()); 
-		
+		mainWindow.setLayout(new BoxLayout(mainWindow.getContentPane(), BoxLayout.Y_AXIS));
+				
 		controlPanel = new JPanel(new GridBagLayout()); 
 		displayPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,0)); 
-		leftMargin = new JPanel();
-		rightMargin = new JPanel();
 		
 		//leftMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height)); // tu bedzie zabawa aby odpowiednio dobrac te wartosci!
 		//rightMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height));
 	
-		mainWindow.add(controlPanel,BorderLayout.NORTH);
-		mainWindow.add(displayPanel,BorderLayout.CENTER);
-		mainWindow.add(leftMargin,BorderLayout.WEST);
-		mainWindow.add(rightMargin,BorderLayout.EAST);
+		mainWindow.add(controlPanel);
+		mainWindow.add(displayPanel);
+		mainWindow.add(Box.createRigidArea(new Dimension(0,15)));	//troche luzu pod spodem
 		
 		mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		mainWindow.setVisible(true); 
@@ -190,20 +188,28 @@ public class MainWindow {
 		
 	}
 	private void buildDisplayPanel() { 
-		//board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
+//		board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu
 		rows = board.getRows(); 
 		cols = board.getCols();
 		
+		displayPanel.setSize(mainWindow.getWidth() - 15, mainWindow.getHeight() - displayPanel.getHeight());
+		
 		cellSideSize = (displayPanel.getSize().height)/rows*9/10;	//tak chyba wygodniej, tez zmniejszylem do 90%
+		if (displayPanel.getSize().width/cols < cellSideSize)
+			cellSideSize = displayPanel.getSize().width/cols;		//na wypadek gdyby plansza nie mieściła się w poziomie
 		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
 		
+	
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++) {
 				displayPanel.add(board.getCell(i, j));
 			}
-
+		displayPanel.setLayout(new GridLayout(rows,cols));
+		displayPanel.setPreferredSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		displayPanel.setMinimumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		displayPanel.setMaximumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
 	}
 	private void initAnimationTimers() {
 		golAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new ActionListener() {
