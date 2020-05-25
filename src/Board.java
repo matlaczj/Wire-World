@@ -29,7 +29,6 @@ public class Board {
 	
 	public void initializeBoard() {
 		BoardClickListener bcl = new BoardClickListener(rows, cols, this); //wspolny dla wszystkich z oszczednosci pamieci
-		Dimension d = new Dimension(MainWindow.cellSideSize, MainWindow.cellSideSize);
 		board = new Cell [rows][cols];
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
@@ -37,13 +36,11 @@ public class Board {
 				if(i==0 || j==0 || i==rows-1 || j==cols-1)
 				{
 					board[i][j] = new Cell(C.PADD, C.PADD);
-					//board[i][j].setPreferredSize(d);
 					continue;
 				}
 				board[i][j] = new Cell(C.OFF, C.OFF);
 				board[i][j].setActionCommand(i+" "+j);
-				board[i][j].addActionListener(bcl); //kazdemu przyciskowi dodajemy ActionListener
-				board[i][j].setPreferredSize(d); //zwiazany z rozmiarem MainWindow				
+				board[i][j].addActionListener(bcl);		
 			}
 	}	
 	public void changeCellsSize(Dimension d) {

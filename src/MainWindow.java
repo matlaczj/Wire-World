@@ -1,4 +1,3 @@
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -26,17 +25,17 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class MainWindow {
-	public static Dimension screenSize;
-	public static byte chosenGame = C.GOL;
+	public static byte chosenGame; //bedziemy chcieli pozbyc sie statica aby mozna bylo tworzyc niezalezne okna aplikacji co jest fajna mozliwoscia
 	public static int cellSideSize;
+	private static Timer golAnimationTimer;
+	private static Timer wwAnimationTimer;
+	
 	private int rows;
 	private int cols;
-	
 	private JFrame mainWindow;
 	private JPanel controlPanel;
 	private JPanel displayPanel; 
 	private Board board;
-	
 	private JButton goHomeBtn;
 	private JButton pauseBtn;
 	private JButton structBtn;
@@ -53,18 +52,19 @@ public class MainWindow {
 	private JRadioButton wwRB;
 	private JRadioButton golRB;
 	private ButtonGroup chooseGameBG;
-	
-	private static Timer golAnimationTimer;
-	private static Timer wwAnimationTimer;
+	private Dimension screenSize;
 
 	public MainWindow() {
 		buildMainWindow();
 		buildRadioButtons();
 		buildControlPanel();
+		initAnimationTimers();
+		initBoard();
+		rebuildMainWindow(); //jest to odpowiedz na konflikty ktore bylo trudno pogodzic, chodzi o to aby odpowiednie elementy istnialy kiedy inne elementy ich potrzebuja
 		buildDisplayPanel();
-        initAnimationTimers();
 	}
-	private void buildMainWindow() {
+	
+	private void buildMainWindow() {		
 		mainWindow = new JFrame("Uniwersalny automat komorkowy"); 
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainWindow.setSize(screenSize);
@@ -83,8 +83,32 @@ public class MainWindow {
 		
 		mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		mainWindow.setVisible(true); 
-		
 	}
+	
+	private void buildRadioButtons() {
+		wwRB = new JRadioButton("WireWorld", true);
+		golRB = new JRadioButton("Game Of Life", false);
+		wwRB.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				chosenGame = C.WW;
+				golAnimationTimer.stop(); //by zatrzymac przy zmianie rodzaju gry
+				wwAnimationTimer.stop();
+			}
+		});
+		golRB.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				chosenGame = C.GOL;
+				golAnimationTimer.stop();
+				wwAnimationTimer.stop();
+			}
+		});
+		chooseGameBG = new ButtonGroup();
+		chooseGameBG.add(wwRB);
+		chooseGameBG.add(golRB);
+	}
+	
 	private void buildControlPanel() {
 		goHomeBtn = new JButton("go home");
 		pauseBtn = new JButton("pause");
@@ -162,46 +186,54 @@ public class MainWindow {
 		controlPanel.add(startBtn,gbc);
 		gbc.gridx = 9;
 		gbc.gridy = 0;
-		controlPanel.add(wwRB);
+		controlPanel.add(wwRB,gbc);
 		gbc.gridx = 9;
 		gbc.gridy = 1;
-		controlPanel.add(golRB);
+		controlPanel.add(golRB,gbc);
 	}
-	private void buildRadioButtons() {
-		wwRB = new JRadioButton("WireWorld", true);
-		golRB = new JRadioButton("Game Of Life", false);
-		wwRB.addItemListener(new ItemListener() {
+	
+	private void initAnimationTimers() {
+		golAnimationTimer = new Timer(getCurrentSpeedLabel()*10 , new ActionListener() {
 			@Override
-			public void itemStateChanged(ItemEvent e) {
-				chosenGame = C.WW;
+			public void actionPerformed(ActionEvent e) {
+				board.calculateNextStateGOL();
+				board.updateBoard();
 			}
 		});
-		golRB.addItemListener(new ItemListener() {
+        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*10 , new ActionListener() {
 			@Override
-			public void itemStateChanged(ItemEvent e) {
-				chosenGame = C.GOL;
+			public void actionPerformed(ActionEvent e) {
+				board.calculateNextStateWW();
+				board.updateBoard();
 			}
 		});
-		chooseGameBG = new ButtonGroup();
-		chooseGameBG.add(wwRB);
-		chooseGameBG.add(golRB);
-		
 	}
-	private void buildDisplayPanel() { 
-//		board = LoadBoardFromFile.loadBoardFromFile("example.life"); //wczytanie pliku
+	
+	private void initBoard() {
+//		board = LoadBoardFromFile.loadBoardFromFile("example.life"); 
 		if(board == null)
-			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu
+			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu //musza istniec rowsTA i colsTA inaczej NullPointerException
+		board = new Board(12,32);
 		rows = board.getRows(); 
 		cols = board.getCols();
-		
-		displayPanel.setSize(mainWindow.getWidth() - 15, mainWindow.getHeight() - displayPanel.getHeight());
+	}
+	
+	private void rebuildMainWindow() {
+//		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height; //pobieram max wysokosc sprzetu bo chce ja maksymalnie wykorzystac
+//		cellSideSize = (screenHeight-100)/rows; // uwaga: ta wartosc jest zaokraglona w dol, odejmuje wysokosc ControlPanel, 100 to zgadywana wysokosc ControlPanel i jest to zmiany bo zalezy od monitora
+//		int frameWidth = cols * cellSideSize + 40; // kolejna liczna do zmiany +40, po prostu po jej dodaniu szerokosc byla pasujaca czyli cos zle liczy nadal szerokosc
+//		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
+//		mainWindow.setMinimumSize(new Dimension(frameWidth, screenHeight));
+//		mainWindow.setMaximumSize(new Dimension(frameWidth, screenHeight));
+	}
+
+	private void buildDisplayPanel() { 
+		displayPanel.setSize(mainWindow.getWidth() - 15, mainWindow.getHeight() - displayPanel.getHeight() - 15);
 		
 		cellSideSize = (displayPanel.getSize().height)/rows*9/10;	//tak chyba wygodniej, tez zmniejszylem do 90%
 		if (displayPanel.getSize().width/cols < cellSideSize)
 			cellSideSize = displayPanel.getSize().width/cols;		//na wypadek gdyby plansza nie mieściła się w poziomie
 		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
-		
-	
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++) {
 				displayPanel.add(board.getCell(i, j));
@@ -211,34 +243,19 @@ public class MainWindow {
 		displayPanel.setMinimumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
 		displayPanel.setMaximumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
 	}
-	private void initAnimationTimers() {
-		golAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				board.calculateNextStateGOL();
-				board.updateBoard();
-			}
-		});
-        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*100 , new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				board.calculateNextStateWW();
-				board.updateBoard();
-			}
-		});
-	}
-	private void initSlider() {
-		
-	}
+	
 	public int getCurrentSpeedLabel() {
 		return Integer.parseInt(currentSpeedLabel.getText());
 	}
+	
 	public void setCurrentSpeedLabel(int currentSpeed) {
 		currentSpeedLabel.setText(String.valueOf(currentSpeed));
 	}
+	
 	public static Timer getGolAnimationTimer() {
 		return golAnimationTimer;
 	}
+	
 	public static Timer getWwAnimationTimer() {
 		return wwAnimationTimer;
 	}

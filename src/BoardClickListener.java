@@ -6,7 +6,7 @@ public class BoardClickListener implements ActionListener {
 	private int cols;
 	private Board board;
 	private byte stateChangeClock = 0;
-	private static String lastCommand;
+//	private static String lastCommand;
 	
 	public BoardClickListener(int rows, int cols, Board board) {
 		super();
@@ -22,12 +22,12 @@ public class BoardClickListener implements ActionListener {
 			for(int j=1; j<cols-1; j++)
 				if(command.equals(i+" "+j))
 				{
-//					if(lastCommand != command)	-- to jest problematyczne
+					//if(lastCommand != command)
 						stateChangeClock = board.getCell(i, j).getState();
 					stateChangeClock++;
 					board.getCell(i,j).setState((byte)(stateChangeClock%4));
 				}
-		lastCommand = command;
+		//lastCommand = command;
 	}
 
 }
