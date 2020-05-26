@@ -76,11 +76,16 @@ public class MainWindow {
 	private JButton choiceWW;
 	private JButton choiceGoL;
 	
+	private Dimension screenSize;
+	
 	private Color bgColor = new Color(238,238,238); //kolor domyslnego tla okna aplikacji
 	
 	
 	public MainWindow() {
 		initIcons();
+		mainWindow = new JFrame("Uniwersalny automat komorkowy");
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		mainWindow.setMaximumSize(screenSize);
 		buildChoiceWindow();
 	}
 	
@@ -98,10 +103,9 @@ public class MainWindow {
 	}
 	
 	private void buildChoiceWindow() {
-		mainWindow = new JFrame("Uniwersalny automat komorkowy");
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		mainWindow.setSize(screenSize);
-		mainWindow.setMaximumSize(screenSize);
+		mainWindow.setSize(600, 400);
+		mainWindow.getContentPane().removeAll();
+		mainWindow.getContentPane().repaint();
 		mainWindow.setLayout(new BorderLayout());
 		
 		choiceWW = new JButton("WireWorld");
@@ -134,6 +138,7 @@ public class MainWindow {
 	}
 	
 	private void buildMainWindow() {
+		mainWindow.setSize(screenSize);
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().repaint();
 		mainWindow.setLayout(new BoxLayout(mainWindow.getContentPane(), BoxLayout.Y_AXIS));
@@ -185,10 +190,10 @@ public class MainWindow {
 	}
 	
 	private void buildControlPanel() {
-		goHomeBtn = new JButton(homeIcon);
-		structsBtn = new JButton(structsIcon);
-		startBtn = new JButton(startIcon);
-		pauseBtn = new JButton(pauseIcon);
+		goHomeBtn = new JButton("Home");
+		structsBtn = new JButton("structs");
+		startBtn = new JButton("start");
+		pauseBtn = new JButton("pause");
 		styleButtons();
 		rowsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE); 
 		columnsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE);
@@ -238,6 +243,14 @@ public class MainWindow {
 				initBoard();
 				buildDisplayPanel();
 			}
+		});
+		goHomeBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				buildChoiceWindow();
+			}
+			
 		});
 		
 		GridBagConstraints gbc = new GridBagConstraints();
