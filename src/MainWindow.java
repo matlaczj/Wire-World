@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -66,6 +67,8 @@ public class MainWindow {
 	private Icon startIcon;
 	private Icon structsIcon; 
 	
+	private Color bgColor = new Color(238,238,238); //kolor domyslnego tla okna aplikacji
+	
 	public MainWindow() {
 		initIcons();
 		buildMainWindow();
@@ -123,6 +126,7 @@ public class MainWindow {
 		structsBtn = new JButton(structsIcon);
 		startBtn = new JButton(startIcon);
 		pauseBtn = new JButton(pauseIcon);
+		styleButtons();
 		rowsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE); 
 		columnsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE);
 		numOfGensTA = new TextArea("default value", 1, 5, TextArea.SCROLLBARS_NONE);
@@ -221,20 +225,32 @@ public class MainWindow {
 		pauseIcon = new ImageIcon("src\\icons\\pause_icon.png");
 		structsIcon = new ImageIcon("src\\icons\\structs_icon.png");
 	}
+	private void styleButtons() {
+		goHomeBtn.setBackground(bgColor);
+		startBtn.setBackground(bgColor);
+		pauseBtn.setBackground(bgColor);
+		structsBtn.setBackground(bgColor);
+		goHomeBtn.setBorderPainted(false);
+		startBtn.setBorderPainted(false);
+		pauseBtn.setBorderPainted(false);
+		structsBtn.setBorderPainted(false);
+	}
 	
 	private void initAnimationTimers() {
-		golAnimationTimer = new Timer(getCurrentSpeedLabel()*10 , new ActionListener() {
+		golAnimationTimer = new Timer(getCurrentSpeedLabel()*50 , new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				board.calculateNextStateGOL();
 				board.updateBoard();
+				golAnimationTimer.setDelay(getCurrentSpeedLabel()); // to chyba niezbyt dziala trudno mi okreslic
 			}
 		});
-        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*10 , new ActionListener() {
+        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*50 , new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				board.calculateNextStateWW();
 				board.updateBoard();
+				golAnimationTimer.setDelay(getCurrentSpeedLabel());
 			}
 		});
 	}
