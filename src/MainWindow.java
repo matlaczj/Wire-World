@@ -77,6 +77,7 @@ public class MainWindow {
 	private JButton choiceGoL;
 	
 	private Dimension screenSize;
+	private int controlPanelHeight;
 	
 	private Color bgColor = new Color(238,238,238); //kolor domyslnego tla okna aplikacji
 	
@@ -244,6 +245,8 @@ public class MainWindow {
 				buildFileChooser();
 				initBoard();
 				buildDisplayPanel();
+				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				mainWindow.setVisible(true);
 			}
 		});
 		goHomeBtn.addActionListener(new ActionListener() {
@@ -308,7 +311,8 @@ public class MainWindow {
 		gbc.gridx = 9;
 		gbc.gridy = 1;
 		controlPanel.add(chooseFileToLoadBtn, gbc);
-	
+		
+		controlPanelHeight = controlPanel.getHeight();
 	}
 	
 	private void initIcons() {
@@ -361,7 +365,8 @@ public class MainWindow {
 	}
 
 	private void buildDisplayPanel() { 
-		displayPanel.setSize(mainWindow.getWidth() - 15, mainWindow.getHeight() - displayPanel.getHeight() - 15);
+		displayPanel.removeAll();
+		displayPanel.setSize(mainWindow.getWidth() - 15, mainWindow.getHeight() - controlPanelHeight - 15);
 		
 		cellSideSize = (displayPanel.getSize().height)/rows*9/10;	
 		if (displayPanel.getSize().width/cols < cellSideSize)
@@ -375,6 +380,7 @@ public class MainWindow {
 		displayPanel.setPreferredSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
 		displayPanel.setMinimumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
 		displayPanel.setMaximumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		displayPanel.setVisible(true);
 	}
 	
 	public int getCurrentSpeedLabel() {
