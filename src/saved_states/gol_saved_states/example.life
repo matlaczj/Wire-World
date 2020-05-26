@@ -13,8 +13,7 @@ columns: 23
 legend to numbers:
 	universal:
 		OFF = 0
-	for GOL only:
-		ON = 1
+		ON = 1	//this is not just GOL only ;)
 	for WW only:
 		HEAD = 2
 		TAIL = 3
