@@ -4,12 +4,11 @@ import java.awt.event.MouseListener;
 
 public class BoardDragListener implements MouseListener{
 	private byte stateChangeClock = 0;
-	private boolean isMouseCurrentlyPressed;
+	private boolean isMouseCurrentlyPressed = false;
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

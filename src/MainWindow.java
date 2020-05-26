@@ -143,8 +143,6 @@ public class MainWindow {
 		startBtn.setActionCommand("startBtn");
 		pauseBtn.setActionCommand("pauseBtn");
 		
-		goHomeBtn.addActionListener(new ButtonClickListener());
-		structsBtn.addActionListener(new ButtonClickListener());
 		startBtn.addActionListener(new ActionListener() { //postanowilem przeniesc tutaj te Listenery poniewaz chcialem aby zmienne nie byly static a jednoczesnie nie chcialem wszystkiego pogmatwac
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -225,6 +223,7 @@ public class MainWindow {
 		pauseIcon = new ImageIcon("src\\icons\\pause_icon.png");
 		structsIcon = new ImageIcon("src\\icons\\structs_icon.png");
 	}
+	
 	private void styleButtons() {
 		goHomeBtn.setBackground(bgColor);
 		startBtn.setBackground(bgColor);
@@ -237,20 +236,20 @@ public class MainWindow {
 	}
 	
 	private void initAnimationTimers() {
-		golAnimationTimer = new Timer(getCurrentSpeedLabel()*50 , new ActionListener() {
+		golAnimationTimer = new Timer(getCurrentSpeedLabel()*10 , new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				board.calculateNextStateGOL();
 				board.updateBoard();
-				golAnimationTimer.setDelay(getCurrentSpeedLabel()); // to chyba niezbyt dziala trudno mi okreslic
+				//golAnimationTimer.setDelay(getCurrentSpeedLabel()); // to chyba niezbyt dziala trudno mi okreslic, mam wrazenie ze spowalnia
 			}
 		});
-        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*50 , new ActionListener() {
+        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*10 , new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				board.calculateNextStateWW();
 				board.updateBoard();
-				golAnimationTimer.setDelay(getCurrentSpeedLabel());
+				//golAnimationTimer.setDelay(getCurrentSpeedLabel());
 			}
 		});
 	}
@@ -259,7 +258,7 @@ public class MainWindow {
 		board = LoadBoardFromFile.loadBoardFromFile("example.life"); //kiedy nie chce wczytac z pliku podaje bledna nazwe aby nie komentowac bo moze sie pomylic i usunac
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu 
-		board = new Board(12,50); //moznaby bardziej wysrodkowac w pionie
+		//board = new Board(50,50); //moznaby bardziej wysrodkowac w pionie gdy plansza jest poziomym prostokatem
 		rows = board.getRows(); 
 		cols = board.getCols();
 	}

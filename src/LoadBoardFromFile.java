@@ -4,12 +4,11 @@ import java.util.Scanner;
 
 //uniwersalna klasa do wczytywania z pliku .life dla GOL oraz WW, potencjalnie rozszerzalna dla innej gry
 public class LoadBoardFromFile {
-	private static String sourceKuba = "C:/Users/Kuba/Documents/GitHub/WireWorld/src";
-
+	
 	public static Board loadBoardFromFile(String fileName) {
 		try {
 			String buffer;
-			Scanner s = new Scanner(new File( sourceKuba + fileName)); //TU MUSISZ MIEC INNA SCIEZKE DOSTEPU -- a nie wystarczy tak?? lol. -niestety ale trzeba da� pe�n�
+			Scanner s = new Scanner(new File( "src\\saved_states\\gol_saved_states\\" + fileName)); //TU MUSISZ MIEC INNA SCIEZKE DOSTEPU -- a nie wystarczy tak?? lol. -niestety ale trzeba da� pe�n�
 			s.next();
 			int rows = s.nextInt()+2; //+2 dla paddingu
 			s.next();

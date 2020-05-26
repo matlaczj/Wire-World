@@ -40,9 +40,8 @@ public class Board {
 					continue;
 				}
 				board[i][j] = new Cell(C.OFF, C.OFF);
-				
 				board[i][j].addActionListener(bcl);		
-				board[i][j].addMouseListener(bdl);
+				board[i][j].addMouseListener(bdl); //niestety ma to koszt, spowalnia program
 			}
 	}	
 	public void changeCellsSize(Dimension d) {
