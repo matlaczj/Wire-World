@@ -28,7 +28,8 @@ public class Board {
 	}
 	
 	private void initializeBoard() {
-		BoardClickListener bcl = new BoardClickListener(rows, cols, this); //wspolny dla wszystkich z oszczednosci pamieci
+		BoardClickListener bcl = new BoardClickListener(); //wspolny dla wszystkich z oszczednosci pamieci
+		BoardDragListener bdl = new BoardDragListener();
 		board = new Cell [rows][cols];
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
@@ -39,8 +40,9 @@ public class Board {
 					continue;
 				}
 				board[i][j] = new Cell(C.OFF, C.OFF);
-				board[i][j].setActionCommand(i+" "+j);
+				
 				board[i][j].addActionListener(bcl);		
+				board[i][j].addMouseListener(bdl);
 			}
 	}	
 	public void changeCellsSize(Dimension d) {
