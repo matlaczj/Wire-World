@@ -334,7 +334,7 @@ public class MainWindow {
 	}
 	
 	private void initBoard() {
-		board = loadFromFileObject.loadBoardFromFile("example.life"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
+//		board = loadFromFileObject.loadBoardFromFile("example.life"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu 
 		//board = new Board(50,50); //moznaby bardziej wysrodkowac w pionie gdy plansza jest poziomym prostokatem
