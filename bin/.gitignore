@@ -17,3 +17,6 @@
 *.life
 *.wire
 /saved_states/
+/MainWindow$6.class
+/MainWindow$7.class
+/MainWindow$8.class
