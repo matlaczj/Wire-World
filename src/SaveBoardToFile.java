@@ -49,8 +49,8 @@ public class SaveBoardToFile {
 				stateNumber = wwStateNumber;
 			}
 			FileWriter fw = new FileWriter(new File(savedStatesCatalogPath + stateNumber + savedStatesExtension));
-			fw.write("rows: " + board.getRows() + "\n");
-			fw.write("columns: " + board.getCols() + "\n");
+			fw.write("rows: " + (board.getRows()-2) + "\n");
+			fw.write("columns: " + (board.getCols()-2) + "\n");
 			fw.write("\n");
 			for(int i=1; i<board.getRows()-1; i++) //nie zapisujemy ramki, bo funkcja wczytujaca sama ja dodaje
 			{
