@@ -94,7 +94,7 @@ public class MainWindow {
 		mainWindow.add(displayPanel);
 		mainWindow.add(Box.createRigidArea(new Dimension(0,15)));	//troche luzu pod spodem
 		
-		mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.setVisible(true); 
 	}
 	

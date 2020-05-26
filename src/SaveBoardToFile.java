@@ -32,8 +32,8 @@ public class SaveBoardToFile {
 				"		TAIL = 3";
 		golSavedStatesCatalogPath = "src\\saved_states\\gol_saved_states\\gol_state_"; //kiedys bedzie mozna ja wybrac dowolna w gui
 		golSavedStatesExtension = ".life";
-		golSavedStatesCatalogPath = "src\\saved_states\\ww_saved_states\\ww_state_";
-		golSavedStatesExtension = ".wire";
+		wwSavedStatesCatalogPath = "src\\saved_states\\ww_saved_states\\ww_state_";
+		wwSavedStatesExtension = ".wire";
 	}
 	
 	public void saveBoardToFile() {
@@ -49,6 +49,9 @@ public class SaveBoardToFile {
 				stateNumber = wwStateNumber;
 			}
 			FileWriter fw = new FileWriter(new File(savedStatesCatalogPath + stateNumber + savedStatesExtension));
+			fw.write("rows: " + board.getRows() + "\n");
+			fw.write("columns: " + board.getCols() + "\n");
+			fw.write("\n");
 			for(int i=1; i<board.getRows()-1; i++) //nie zapisujemy ramki, bo funkcja wczytujaca sama ja dodaje
 			{
 				for(int j=1; j<board.getCols()-1; j++)
