@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -55,8 +56,6 @@ public class MainWindow {
 	
 	private JSlider speedSlider;
 	
-	private JRadioButton wwRB;
-	private JRadioButton golRB;
 	private ButtonGroup chooseGameBG;
 	
 	private Timer golAnimationTimer;
@@ -65,26 +64,69 @@ public class MainWindow {
 	private Icon homeIcon;
 	private Icon pauseIcon;
 	private Icon startIcon;
-	private Icon structsIcon; 
+	private Icon structsIcon;
+	
+	private JButton choiceWW;
+	private JButton choiceGoL;
 	
 	private Color bgColor = new Color(238,238,238); //kolor domyslnego tla okna aplikacji
 	
 	public MainWindow() {
 		initIcons();
+		buildChoiceWindow();
+	}
+	
+	private void setupWindow() {
 		buildMainWindow();
-		buildRadioButtons();
+//		buildRadioButtons();
 		buildControlPanel();
 		initAnimationTimers();
 		initBoard();
 		buildDisplayPanel();
 		saveToFileObject = new SaveBoardToFile(board, chosenGame);
+		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainWindow.setVisible(true);
 	}
 	
-	private void buildMainWindow() {
-		mainWindow = new JFrame("Uniwersalny automat komorkowy"); 
+	private void buildChoiceWindow() {
+		mainWindow = new JFrame("Uniwersalny automat komorkowy");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainWindow.setSize(screenSize);
 		mainWindow.setMaximumSize(screenSize);
+		mainWindow.setLayout(new BorderLayout());
+		
+		choiceWW = new JButton("WireWorld");
+		choiceGoL = new JButton("Game of Life");
+		choiceWW.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chosenGame = C.WW;
+				setupWindow();
+			}
+			
+		});
+		choiceGoL.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chosenGame = C.GOL;
+				setupWindow();
+			}
+			
+		});
+		choiceWW.setPreferredSize(new Dimension(mainWindow.getWidth()/2, mainWindow.getHeight()));
+		choiceGoL.setPreferredSize(new Dimension(mainWindow.getWidth()/2, mainWindow.getHeight()));
+		mainWindow.add(choiceWW, BorderLayout.WEST);
+		mainWindow.add(choiceGoL, BorderLayout.EAST);
+		
+		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainWindow.setVisible(true); 
+	}
+	
+	private void buildMainWindow() {
+		mainWindow.getContentPane().removeAll();
+		mainWindow.getContentPane().repaint();
 		mainWindow.setLayout(new BoxLayout(mainWindow.getContentPane(), BoxLayout.Y_AXIS));
 				
 		controlPanel = new JPanel(new GridBagLayout()); 
@@ -95,34 +137,34 @@ public class MainWindow {
 		mainWindow.add(Box.createRigidArea(new Dimension(0,15)));	//troche luzu pod spodem
 		
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainWindow.setVisible(true); 
+		mainWindow.setVisible(true);
 	}
 	
-	private void buildRadioButtons() {
-		wwRB = new JRadioButton("WireWorld", false);
-		golRB = new JRadioButton("Game Of Life", false);
-		wwRB.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				chosenGame = C.WW;
-				golAnimationTimer.stop(); //by zatrzymac przy zmianie rodzaju gry
-				wwAnimationTimer.stop();
-				saveToFileObject.setChosenGame(chosenGame); //aktualizuje typ gry w objekcie zapisujacym do pliku
-			}
-		});
-		golRB.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				chosenGame = C.GOL;
-				golAnimationTimer.stop();
-				wwAnimationTimer.stop();
-				saveToFileObject.setChosenGame(chosenGame);
-			}
-		});
-		chooseGameBG = new ButtonGroup();
-		chooseGameBG.add(wwRB);
-		chooseGameBG.add(golRB);
-	}
+//	private void buildRadioButtons() {
+//		wwRB = new JRadioButton("WireWorld", false);
+//		golRB = new JRadioButton("Game Of Life", false);
+//		wwRB.addItemListener(new ItemListener() {
+//			@Override
+//			public void itemStateChanged(ItemEvent e) {
+//				chosenGame = C.WW;
+//				golAnimationTimer.stop(); //by zatrzymac przy zmianie rodzaju gry
+//				wwAnimationTimer.stop();
+//				saveToFileObject.setChosenGame(chosenGame); //aktualizuje typ gry w objekcie zapisujacym do pliku
+//			}
+//		});
+//		golRB.addItemListener(new ItemListener() {
+//			@Override
+//			public void itemStateChanged(ItemEvent e) {
+//				chosenGame = C.GOL;
+//				golAnimationTimer.stop();
+//				wwAnimationTimer.stop();
+//				saveToFileObject.setChosenGame(chosenGame);
+//			}
+//		});
+//		chooseGameBG = new ButtonGroup();
+//		chooseGameBG.add(wwRB);
+//		chooseGameBG.add(golRB);
+//	}
 	
 	private void buildControlPanel() {
 		goHomeBtn = new JButton(homeIcon);
@@ -212,12 +254,12 @@ public class MainWindow {
 		gbc.gridx = 8;
 		gbc.gridy = 1;
 		controlPanel.add(structsBtn,gbc);
-		gbc.gridx = 9;
-		gbc.gridy = 0;
-		controlPanel.add(wwRB,gbc);
-		gbc.gridx = 9;
-		gbc.gridy = 1;
-		controlPanel.add(golRB,gbc);
+//		gbc.gridx = 9;
+//		gbc.gridy = 0;
+//		controlPanel.add(wwRB,gbc);
+//		gbc.gridx = 9;
+//		gbc.gridy = 1;
+//		controlPanel.add(golRB,gbc);
 	}
 	
 	private void initIcons() {

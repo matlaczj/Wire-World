@@ -16,3 +16,7 @@
 /MainWindow$5.class
 *.life
 *.wire
+/BoardDragListener.class
+/MainWindow$6.class
+/MainWindow$7.class
+/SaveBoardToFile.class
