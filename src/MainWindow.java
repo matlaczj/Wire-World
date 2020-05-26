@@ -94,7 +94,10 @@ public class MainWindow {
 //		buildRadioButtons();
 		buildControlPanel();
 		initAnimationTimers();
+		loadFromFileObject = new LoadBoardFromFile(chosenGame);
 		initBoard();
+		saveToFileObject = new SaveBoardToFile(board, chosenGame);
+		saveToFileObject.setChosenGame(chosenGame);
 		buildDisplayPanel();
 		loadFromFileObject = new LoadBoardFromFile(chosenGame);
 		saveToFileObject = new SaveBoardToFile(board, chosenGame);
@@ -150,8 +153,8 @@ public class MainWindow {
 		mainWindow.add(displayPanel);
 		mainWindow.add(Box.createRigidArea(new Dimension(0,15)));	//troche luzu pod spodem
 		
-		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainWindow.setVisible(true);
+//		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		mainWindow.setVisible(true);
 	}
 	
 //	private void buildRadioButtons() {
@@ -186,7 +189,6 @@ public class MainWindow {
 		if(result == JFileChooser.APPROVE_OPTION) {
 			loadFromFileObject.setUsersCatalogPath(chooseFileToLoadFC.getSelectedFile().getAbsolutePath());
 		}
-		
 	}
 	
 	private void buildControlPanel() {
@@ -349,9 +351,10 @@ public class MainWindow {
 	}
 	
 	private void initBoard() {
-//		board = loadFromFileObject.loadBoardFromFile("example.life"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
-//		if(board == null)
-			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu 
+		Board loadBoard = loadFromFileObject.loadBoardFromFile("example.life"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
+		if(loadBoard == null)
+			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu
+		else board = loadBoard;
 		//board = new Board(50,50); //moznaby bardziej wysrodkowac w pionie gdy plansza jest poziomym prostokatem
 		rows = board.getRows(); 
 		cols = board.getCols();
