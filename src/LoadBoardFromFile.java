@@ -8,7 +8,7 @@ public class LoadBoardFromFile {
 	public static Board loadBoardFromFile(String fileName) {
 		try {
 			String buffer;
-			Scanner s = new Scanner(new File( "src\\saved_states\\gol_saved_states\\" + fileName)); //TU MUSISZ MIEC INNA SCIEZKE DOSTEPU -- a nie wystarczy tak?? lol. -niestety ale trzeba da� pe�n�
+			Scanner s = new Scanner(new File( "src\\saved_states\\gol_saved_states\\" + fileName)); //uniwersalna sciezka, dzialajaca
 			s.next();
 			int rows = s.nextInt()+2; //+2 dla paddingu
 			s.next();
