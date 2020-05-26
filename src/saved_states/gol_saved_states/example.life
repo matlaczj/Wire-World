@@ -12,7 +12,6 @@ columns: 23
 
 legend to numbers:
 	universal:
-		PADDING = 4
 		OFF = 0
 	for GOL only:
 		ON = 1

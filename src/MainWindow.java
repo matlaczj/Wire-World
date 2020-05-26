@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -32,6 +31,7 @@ public class MainWindow {
 	private int cols;
 	private int cellSideSize;
 	private byte chosenGame;
+	private SaveBoardToFile saveToFileObject;
 	
 	private JFrame mainWindow;
 	private JPanel controlPanel;
@@ -77,6 +77,7 @@ public class MainWindow {
 		initAnimationTimers();
 		initBoard();
 		buildDisplayPanel();
+		saveToFileObject = new SaveBoardToFile(board, chosenGame);
 	}
 	
 	private void buildMainWindow() {
@@ -106,6 +107,7 @@ public class MainWindow {
 				chosenGame = C.WW;
 				golAnimationTimer.stop(); //by zatrzymac przy zmianie rodzaju gry
 				wwAnimationTimer.stop();
+				saveToFileObject.setChosenGame(chosenGame); //aktualizuje typ gry w objekcie zapisujacym do pliku
 			}
 		});
 		golRB.addItemListener(new ItemListener() {
@@ -114,6 +116,7 @@ public class MainWindow {
 				chosenGame = C.GOL;
 				golAnimationTimer.stop();
 				wwAnimationTimer.stop();
+				saveToFileObject.setChosenGame(chosenGame);
 			}
 		});
 		chooseGameBG = new ButtonGroup();
@@ -241,6 +244,7 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				board.calculateNextStateGOL();
 				board.updateBoard();
+				saveToFileObject.saveBoardToFile(); //obecnie zapisuje kazdy nowy stan
 				//golAnimationTimer.setDelay(getCurrentSpeedLabel()); // to chyba niezbyt dziala trudno mi okreslic, mam wrazenie ze spowalnia
 			}
 		});
@@ -249,6 +253,7 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				board.calculateNextStateWW();
 				board.updateBoard();
+				saveToFileObject.saveBoardToFile();
 				//golAnimationTimer.setDelay(getCurrentSpeedLabel());
 			}
 		});
