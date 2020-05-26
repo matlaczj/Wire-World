@@ -5,6 +5,12 @@ import java.awt.event.MouseListener;
 public class BoardDragListener implements MouseListener{
 	private byte stateChangeClock = 0;
 	private boolean isMouseCurrentlyPressed = false;
+	private byte chosenGame;
+	
+	public BoardDragListener(byte chosenGame) {
+		super();
+		this.chosenGame = chosenGame;
+	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -17,7 +23,10 @@ public class BoardDragListener implements MouseListener{
 			Cell cell = (Cell)e.getSource();
 			stateChangeClock = cell.getState();
 			stateChangeClock++;
-			cell.setState((byte)(stateChangeClock%4));
+			if (chosenGame == C.WW)
+				cell.setState((byte)(stateChangeClock%4));
+			else if (chosenGame == C.GOL)
+				cell.setState((byte)(stateChangeClock%2));
 		}
 	}
 

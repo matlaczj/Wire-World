@@ -29,7 +29,7 @@ public class LoadBoardFromFile {
 			int rows = s.nextInt()+2; //+2 dla paddingu
 			s.next();
 			int cols = s.nextInt()+2;
-			Board board = new Board(rows, cols);
+			Board board = new Board(rows, cols, chosenGame);
 			s.nextLine();
 			s.nextLine();
 			

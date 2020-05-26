@@ -4,10 +4,12 @@ public class Board {
 	private int rows;
 	private int cols;
 	private Cell[][] board;
+	private byte chosenGame;
 	
-	public Board(int rows, int cols) {
+	public Board(int rows, int cols, byte chosenGame) {
 		this.rows = rows;
 		this.cols = cols;
+		this.chosenGame = chosenGame;
 		initializeBoard();
 	}
 	
@@ -22,8 +24,8 @@ public class Board {
 	}
 	
 	private void initializeBoard() {
-		BoardClickListener bcl = new BoardClickListener(); //wspolny dla wszystkich z oszczednosci pamieci
-		BoardDragListener bdl = new BoardDragListener();
+		BoardClickListener bcl = new BoardClickListener(chosenGame); //wspolny dla wszystkich z oszczednosci pamieci
+		BoardDragListener bdl = new BoardDragListener(chosenGame);
 		board = new Cell [rows][cols];
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
