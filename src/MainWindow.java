@@ -260,10 +260,10 @@ public class MainWindow {
 	}
 	
 	private void initBoard() {
-		board = LoadBoardFromFile.loadBoardFromFile("example.life"); //juz dziala, sciezka jest juz uniwersalna
+		board = LoadBoardFromFile.loadBoardFromFile("ww_state_64.wire", C.GOL); //juz dziala, sciezka jest juz uniwersalna
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu 
-		board = new Board(50,50); //moznaby bardziej wysrodkowac w pionie gdy plansza jest poziomym prostokatem
+		//board = new Board(50,50); //moznaby bardziej wysrodkowac w pionie gdy plansza jest poziomym prostokatem
 		rows = board.getRows(); 
 		cols = board.getCols();
 	}

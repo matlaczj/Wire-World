@@ -5,10 +5,17 @@ import java.util.Scanner;
 //uniwersalna klasa do wczytywania z pliku .life dla GOL oraz WW, potencjalnie rozszerzalna dla innej gry
 public class LoadBoardFromFile {
 	
-	public static Board loadBoardFromFile(String fileName) {
+	public static Board loadBoardFromFile(String fileName, byte chosenGame) {
 		try {
+			File file;
+			if(chosenGame == C.GOL)
+				file = new File("src\\saved_states\\gol_saved_states\\" + fileName);
+			else if(chosenGame == C.WW)
+				file = new File("src\\saved_states\\ww_saved_states\\" + fileName);
+			else 
+				return null;
 			String buffer;
-			Scanner s = new Scanner(new File( "src\\saved_states\\gol_saved_states\\" + fileName)); //uniwersalna sciezka, dzialajaca
+			Scanner s = new Scanner(file); //uniwersalna sciezka, dzialajaca
 			s.next();
 			int rows = s.nextInt()+2; //+2 dla paddingu
 			s.next();
