@@ -12,12 +12,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,6 +29,7 @@ import javax.swing.JSlider;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileSystemView;
 
 public class MainWindow {
 	private int rows;
@@ -33,6 +37,7 @@ public class MainWindow {
 	private int cellSideSize;
 	private byte chosenGame;
 	private SaveBoardToFile saveToFileObject;
+	private LoadBoardFromFile loadFromFileObject;
 	
 	private JFrame mainWindow;
 	private JPanel controlPanel;
@@ -43,6 +48,8 @@ public class MainWindow {
 	private JButton pauseBtn;
 	private JButton structsBtn;
 	private JButton startBtn;
+	private JButton chooseFileToLoadBtn;
+	private JFileChooser chooseFileToLoadFC;
 	
 	private TextArea rowsTA;
 	private TextArea columnsTA;
@@ -71,6 +78,7 @@ public class MainWindow {
 	
 	private Color bgColor = new Color(238,238,238); //kolor domyslnego tla okna aplikacji
 	
+	
 	public MainWindow() {
 		initIcons();
 		buildChoiceWindow();
@@ -83,6 +91,7 @@ public class MainWindow {
 		initAnimationTimers();
 		initBoard();
 		buildDisplayPanel();
+		loadFromFileObject = new LoadBoardFromFile(chosenGame);
 		saveToFileObject = new SaveBoardToFile(board, chosenGame);
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.setVisible(true);
@@ -166,6 +175,15 @@ public class MainWindow {
 //		chooseGameBG.add(golRB);
 //	}
 	
+	private void buildFileChooser() {
+		chooseFileToLoadFC = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		int result = chooseFileToLoadFC.showOpenDialog(null);
+		if(result == JFileChooser.APPROVE_OPTION) {
+			loadFromFileObject.setUsersCatalogPath(chooseFileToLoadFC.getSelectedFile().getAbsolutePath());
+		}
+		
+	}
+	
 	private void buildControlPanel() {
 		goHomeBtn = new JButton(homeIcon);
 		structsBtn = new JButton(structsIcon);
@@ -175,18 +193,20 @@ public class MainWindow {
 		rowsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE); 
 		columnsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE);
 		numOfGensTA = new TextArea("default value", 1, 5, TextArea.SCROLLBARS_NONE);
-		rowsLabel = new JLabel("rows:");
+		rowsLabel = new JLabel("  rows:");
 		columnsLabel = new JLabel("columns:");
-		numOfGensLabel = new JLabel("number of generations:");
-		speedLabel = new JLabel("animation speed:");
+		numOfGensLabel = new JLabel("nr of generations:");
+		speedLabel = new JLabel("  animation speed:");
 		speedSlider = new JSlider(1,9,5);
 		currentSpeedLabel = new JLabel("5");
+		chooseFileToLoadBtn = new JButton("load state");
 		
 		//to jest tylko po to aby ButtonClickListener mogl obslugiwac te przyciski bez dostepu do nich bezposrednio
 		goHomeBtn.setActionCommand("goHomeBtn");
 		structsBtn.setActionCommand("structBtn");
 		startBtn.setActionCommand("startBtn");
 		pauseBtn.setActionCommand("pauseBtn");
+		chooseFileToLoadBtn.setActionCommand("chooseFileToLoadBtn");
 		
 		startBtn.addActionListener(new ActionListener() { //postanowilem przeniesc tutaj te Listenery poniewaz chcialem aby zmienne nie byly static a jednoczesnie nie chcialem wszystkiego pogmatwac
 			@Override
@@ -211,10 +231,18 @@ public class MainWindow {
 				setCurrentSpeedLabel(currentSpeed);
 			}
 		});
+		chooseFileToLoadBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				buildFileChooser();
+				initBoard();
+				buildDisplayPanel();
+			}
+		});
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(0,15,0,15);
+		gbc.insets = new Insets(0,1,0,1);
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		controlPanel.add(goHomeBtn,gbc);
@@ -260,6 +288,10 @@ public class MainWindow {
 //		gbc.gridx = 9;
 //		gbc.gridy = 1;
 //		controlPanel.add(golRB,gbc);
+		gbc.gridx = 9;
+		gbc.gridy = 1;
+		controlPanel.add(chooseFileToLoadBtn, gbc);
+	
 	}
 	
 	private void initIcons() {
@@ -302,7 +334,7 @@ public class MainWindow {
 	}
 	
 	private void initBoard() {
-		board = LoadBoardFromFile.loadBoardFromFile("ww_state_12.wire", C.WW); //juz dziala, sciezka jest juz uniwersalna
+		board = loadFromFileObject.loadBoardFromFile("example.life"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu 
 		//board = new Board(50,50); //moznaby bardziej wysrodkowac w pionie gdy plansza jest poziomym prostokatem

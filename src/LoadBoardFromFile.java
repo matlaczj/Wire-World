@@ -4,16 +4,25 @@ import java.util.Scanner;
 
 //uniwersalna klasa do wczytywania z pliku .life dla GOL oraz WW, potencjalnie rozszerzalna dla innej gry
 public class LoadBoardFromFile {
+	private String usersCatalogPath = "";
+	private byte chosenGame = C.GOL;
 	
-	public static Board loadBoardFromFile(String fileName, byte chosenGame) {
+	public LoadBoardFromFile(byte chosenGame){
+		this.chosenGame = chosenGame;
+	}
+	
+	public Board loadBoardFromFile(String fileName) {
 		try {
 			File file;
-			if(chosenGame == C.GOL)
+			if(!usersCatalogPath.equals("")) {
+				file = new File(usersCatalogPath);
+			}
+			else if(chosenGame == C.GOL)
 				file = new File("src\\saved_states\\gol_saved_states\\" + fileName);
 			else if(chosenGame == C.WW)
 				file = new File("src\\saved_states\\ww_saved_states\\" + fileName);
 			else 
-				return null;
+				return null; //jesli wybierzemy nieprawidlowy plik dla wybranego typu gry
 			String buffer;
 			Scanner s = new Scanner(file); //uniwersalna sciezka, dzialajaca
 			s.next();
@@ -58,5 +67,13 @@ public class LoadBoardFromFile {
 			return null;
 		}
 		
+	}
+	
+	public String getUsersCatalogPath() {
+		return usersCatalogPath;
+	}
+
+	public void setUsersCatalogPath(String usersCatalogPath) {
+		this.usersCatalogPath = usersCatalogPath;
 	}
 }
