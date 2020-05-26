@@ -25,7 +25,6 @@ public class SaveBoardToFile {
 		legend = "legend to numbers:\r\n" + 
 				"	universal:\r\n" + 
 				"		OFF = 0\r\n" + 
-				"	for GOL only:\r\n" + 
 				"		ON = 1\r\n" + 
 				"	for WW only:\r\n" + 
 				"		HEAD = 2\r\n" + 

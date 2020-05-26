@@ -197,10 +197,10 @@ public class MainWindow {
 	}
 	
 	private void buildControlPanel() {
-		goHomeBtn = new JButton("Home");
-		structsBtn = new JButton("structs");
-		startBtn = new JButton("start");
-		pauseBtn = new JButton("pause");
+		goHomeBtn = new JButton(homeIcon);
+		structsBtn = new JButton(structsIcon);
+		startBtn = new JButton(startIcon);
+		pauseBtn = new JButton(pauseIcon);
 		styleButtons();
 		rowsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE); 
 		columnsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE);
