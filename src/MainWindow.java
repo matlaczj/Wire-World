@@ -187,8 +187,12 @@ public class MainWindow {
 	private void buildFileChooser() {
 		chooseFileToLoadFC = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		int result = chooseFileToLoadFC.showOpenDialog(null);
-		if(result == JFileChooser.APPROVE_OPTION) {
+		if(result == JFileChooser.APPROVE_OPTION) {		//musiałem przenieść do wewnątrz bo inaczej cancel czyścił planszę
 			loadFromFileObject.setUsersCatalogPath(chooseFileToLoadFC.getSelectedFile().getAbsolutePath());
+			initBoard();
+			buildDisplayPanel();
+			mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			mainWindow.setVisible(true);
 		}
 	}
 	
@@ -243,10 +247,6 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buildFileChooser();
-				initBoard();
-				buildDisplayPanel();
-				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				mainWindow.setVisible(true);
 			}
 		});
 		goHomeBtn.addActionListener(new ActionListener() {
@@ -355,10 +355,9 @@ public class MainWindow {
 	}
 	
 	private void initBoard() {
-		Board loadBoard = loadFromFileObject.loadBoardFromFile("example.life"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
-		if(loadBoard == null)
+		board = loadFromFileObject.loadBoardFromFile("example.life"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
+		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu
-		else board = loadBoard;
 		//board = new Board(50,50); //moznaby bardziej wysrodkowac w pionie gdy plansza jest poziomym prostokatem
 		rows = board.getRows(); 
 		cols = board.getCols();
