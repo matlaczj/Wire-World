@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 public class ButtonClickListener implements ActionListener {
 
 	// obsluguje przyciski z menu w MainWindow
+	// ale juz nie dla wszytskich
+	//bycmoze usune pozniej jesli nie bedzie miala sensu ta klasa
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
@@ -14,20 +16,6 @@ public class ButtonClickListener implements ActionListener {
 		else if(command.equals("structBtn")) {
 			;
 		} 
-		else if(command.equals("startBtn")) { //wznowi/uruchomi okreslona gre w przeciwienstwie do pauzy
-			if(MainWindow.chosenGame == C.GOL)
-			{
-				MainWindow.getGolAnimationTimer().start();
-			}
-			if(MainWindow.chosenGame == C.WW)
-			{
-				MainWindow.getWwAnimationTimer().start();
-			}
-		}
-		else if(command.equals("pauseBtn")) { //zatrzyma wszystkie gry tak samo
-				MainWindow.getGolAnimationTimer().stop();
-				MainWindow.getWwAnimationTimer().stop();
-		}
 		
 	}
 }

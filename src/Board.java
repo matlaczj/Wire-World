@@ -27,7 +27,7 @@ public class Board {
 		return board[r][c];
 	}
 	
-	public void initializeBoard() {
+	private void initializeBoard() {
 		BoardClickListener bcl = new BoardClickListener(rows, cols, this); //wspolny dla wszystkich z oszczednosci pamieci
 		board = new Cell [rows][cols];
 		for(int i=0; i<rows; i++)

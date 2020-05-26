@@ -25,13 +25,12 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class MainWindow {
-	public static byte chosenGame; //bedziemy chcieli pozbyc sie statica aby mozna bylo tworzyc niezalezne okna aplikacji co jest fajna mozliwoscia
-	public static int cellSideSize;
-	private static Timer golAnimationTimer;
-	private static Timer wwAnimationTimer;
+	private byte chosenGame; //bedziemy chcieli pozbyc sie statica aby mozna bylo tworzyc niezalezne okna aplikacji co jest fajna mozliwoscia
+	
 	
 	private int rows;
 	private int cols;
+	private int cellSideSize;
 	private JFrame mainWindow;
 	private JPanel controlPanel;
 	private JPanel displayPanel; 
@@ -53,14 +52,15 @@ public class MainWindow {
 	private JRadioButton golRB;
 	private ButtonGroup chooseGameBG;
 	private Dimension screenSize;
-
+	private Timer golAnimationTimer;
+	private Timer wwAnimationTimer;
+	
 	public MainWindow() {
 		buildMainWindow();
 		buildRadioButtons();
 		buildControlPanel();
 		initAnimationTimers();
 		initBoard();
-		rebuildMainWindow(); //jest to odpowiedz na konflikty ktore bylo trudno pogodzic, chodzi o to aby odpowiednie elementy istnialy kiedy inne elementy ich potrzebuja
 		buildDisplayPanel();
 	}
 	
@@ -74,9 +74,6 @@ public class MainWindow {
 		controlPanel = new JPanel(new GridBagLayout()); 
 		displayPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,0)); 
 		
-		//leftMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height)); // tu bedzie zabawa aby odpowiednio dobrac te wartosci!
-		//rightMargin.setPreferredSize(new Dimension( (screenSize.width - (cols * cellSideSize))/2 ,screenSize.height));
-	
 		mainWindow.add(controlPanel);
 		mainWindow.add(displayPanel);
 		mainWindow.add(Box.createRigidArea(new Dimension(0,15)));	//troche luzu pod spodem
@@ -111,9 +108,10 @@ public class MainWindow {
 	
 	private void buildControlPanel() {
 		goHomeBtn = new JButton("go home");
-		pauseBtn = new JButton("pause");
 		structBtn = new JButton("structs");
 		startBtn = new JButton("start");
+		pauseBtn = new JButton("pause");
+		pauseBtn = new JButton("pause");
 		rowsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE); 
 		columnsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE);
 		numOfGensTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE);
@@ -126,14 +124,28 @@ public class MainWindow {
 		
 		//to jest tylko po to aby ButtonClickListener mogl obslugiwac te przyciski bez dostepu do nich bezposrednio
 		goHomeBtn.setActionCommand("goHomeBtn");
-		pauseBtn.setActionCommand("pauseBtn");
 		structBtn.setActionCommand("structBtn");
 		startBtn.setActionCommand("startBtn");
+		pauseBtn.setActionCommand("pauseBtn");
 		
 		goHomeBtn.addActionListener(new ButtonClickListener());
-		pauseBtn.addActionListener(new ButtonClickListener());
 		structBtn.addActionListener(new ButtonClickListener());
-		startBtn.addActionListener(new ButtonClickListener());
+		startBtn.addActionListener(new ActionListener() { //postanowilem przeniesc tutaj te Listenery poniewaz chcialem aby zmienne nie byly static a jednoczesnie nie chcialem wszystkiego pogmatwac
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(chosenGame == C.GOL)
+					golAnimationTimer.start();
+				if(chosenGame == C.WW)
+					wwAnimationTimer.start();
+			}
+		});
+		pauseBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				golAnimationTimer.stop();
+				wwAnimationTimer.stop();
+			}
+		});
 		speedSlider.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -210,29 +222,20 @@ public class MainWindow {
 	}
 	
 	private void initBoard() {
-//		board = LoadBoardFromFile.loadBoardFromFile("example.life"); 
+		board = LoadBoardFromFile.loadBoardFromFile("exampleeeeee.life"); //kiedy nie chce wczytac z pliku podaje bledna nazwe aby nie komentowac bo moze sie pomylic i usunac
 		if(board == null)
-			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu //musza istniec rowsTA i colsTA inaczej NullPointerException
+			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu 
 		board = new Board(12,32);
 		rows = board.getRows(); 
 		cols = board.getCols();
-	}
-	
-	private void rebuildMainWindow() {
-//		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height; //pobieram max wysokosc sprzetu bo chce ja maksymalnie wykorzystac
-//		cellSideSize = (screenHeight-100)/rows; // uwaga: ta wartosc jest zaokraglona w dol, odejmuje wysokosc ControlPanel, 100 to zgadywana wysokosc ControlPanel i jest to zmiany bo zalezy od monitora
-//		int frameWidth = cols * cellSideSize + 40; // kolejna liczna do zmiany +40, po prostu po jej dodaniu szerokosc byla pasujaca czyli cos zle liczy nadal szerokosc
-//		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
-//		mainWindow.setMinimumSize(new Dimension(frameWidth, screenHeight));
-//		mainWindow.setMaximumSize(new Dimension(frameWidth, screenHeight));
 	}
 
 	private void buildDisplayPanel() { 
 		displayPanel.setSize(mainWindow.getWidth() - 15, mainWindow.getHeight() - displayPanel.getHeight() - 15);
 		
-		cellSideSize = (displayPanel.getSize().height)/rows*9/10;	//tak chyba wygodniej, tez zmniejszylem do 90%
+		cellSideSize = (displayPanel.getSize().height)/rows*9/10;	
 		if (displayPanel.getSize().width/cols < cellSideSize)
-			cellSideSize = displayPanel.getSize().width/cols;		//na wypadek gdyby plansza nie mieściła się w poziomie
+			cellSideSize = displayPanel.getSize().width/cols;		//na wypadek gdyby plansza nie miescila sie w poziomie
 		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++) {
@@ -250,14 +253,6 @@ public class MainWindow {
 	
 	public void setCurrentSpeedLabel(int currentSpeed) {
 		currentSpeedLabel.setText(String.valueOf(currentSpeed));
-	}
-	
-	public static Timer getGolAnimationTimer() {
-		return golAnimationTimer;
-	}
-	
-	public static Timer getWwAnimationTimer() {
-		return wwAnimationTimer;
 	}
 
 }
