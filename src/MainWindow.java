@@ -14,6 +14,8 @@ import java.awt.event.ItemListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,37 +27,47 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class MainWindow {
-	private byte chosenGame; //bedziemy chcieli pozbyc sie statica aby mozna bylo tworzyc niezalezne okna aplikacji co jest fajna mozliwoscia
-	
-	
 	private int rows;
 	private int cols;
 	private int cellSideSize;
+	private byte chosenGame;
+	
 	private JFrame mainWindow;
 	private JPanel controlPanel;
 	private JPanel displayPanel; 
 	private Board board;
+	
 	private JButton goHomeBtn;
 	private JButton pauseBtn;
-	private JButton structBtn;
+	private JButton structsBtn;
 	private JButton startBtn;
+	
 	private TextArea rowsTA;
 	private TextArea columnsTA;
 	private TextArea numOfGensTA;
+	
 	private JLabel rowsLabel;
 	private JLabel columnsLabel;
 	private JLabel numOfGensLabel;
 	private JLabel speedLabel;
 	private JLabel currentSpeedLabel;
+	
 	private JSlider speedSlider;
+	
 	private JRadioButton wwRB;
 	private JRadioButton golRB;
 	private ButtonGroup chooseGameBG;
-	private Dimension screenSize;
+	
 	private Timer golAnimationTimer;
 	private Timer wwAnimationTimer;
 	
+	private Icon homeIcon;
+	private Icon pauseIcon;
+	private Icon startIcon;
+	private Icon structsIcon; 
+	
 	public MainWindow() {
+		initIcons();
 		buildMainWindow();
 		buildRadioButtons();
 		buildControlPanel();
@@ -64,9 +76,9 @@ public class MainWindow {
 		buildDisplayPanel();
 	}
 	
-	private void buildMainWindow() {		
+	private void buildMainWindow() {
 		mainWindow = new JFrame("Uniwersalny automat komorkowy"); 
-		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainWindow.setSize(screenSize);
 		mainWindow.setMaximumSize(screenSize);
 		mainWindow.setLayout(new BoxLayout(mainWindow.getContentPane(), BoxLayout.Y_AXIS));
@@ -107,29 +119,28 @@ public class MainWindow {
 	}
 	
 	private void buildControlPanel() {
-		goHomeBtn = new JButton("go home");
-		structBtn = new JButton("structs");
-		startBtn = new JButton("start");
-		pauseBtn = new JButton("pause");
-		pauseBtn = new JButton("pause");
-		rowsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE); 
-		columnsTA = new TextArea("10", 1, 8, TextArea.SCROLLBARS_NONE);
-		numOfGensTA = new TextArea("default value", 1, 8, TextArea.SCROLLBARS_NONE);
+		goHomeBtn = new JButton(homeIcon);
+		structsBtn = new JButton(structsIcon);
+		startBtn = new JButton(startIcon);
+		pauseBtn = new JButton(pauseIcon);
+		rowsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE); 
+		columnsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE);
+		numOfGensTA = new TextArea("default value", 1, 5, TextArea.SCROLLBARS_NONE);
 		rowsLabel = new JLabel("rows:");
 		columnsLabel = new JLabel("columns:");
 		numOfGensLabel = new JLabel("number of generations:");
 		speedLabel = new JLabel("animation speed:");
-		speedSlider = new JSlider(1,10,5);
+		speedSlider = new JSlider(1,9,5);
 		currentSpeedLabel = new JLabel("5");
 		
 		//to jest tylko po to aby ButtonClickListener mogl obslugiwac te przyciski bez dostepu do nich bezposrednio
 		goHomeBtn.setActionCommand("goHomeBtn");
-		structBtn.setActionCommand("structBtn");
+		structsBtn.setActionCommand("structBtn");
 		startBtn.setActionCommand("startBtn");
 		pauseBtn.setActionCommand("pauseBtn");
 		
 		goHomeBtn.addActionListener(new ButtonClickListener());
-		structBtn.addActionListener(new ButtonClickListener());
+		structsBtn.addActionListener(new ButtonClickListener());
 		startBtn.addActionListener(new ActionListener() { //postanowilem przeniesc tutaj te Listenery poniewaz chcialem aby zmienne nie byly static a jednoczesnie nie chcialem wszystkiego pogmatwac
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -189,19 +200,26 @@ public class MainWindow {
 		controlPanel.add(currentSpeedLabel);
 		gbc.gridx = 6;
 		gbc.gridy = 1;
-		controlPanel.add(pauseBtn,gbc);
+		controlPanel.add(startBtn,gbc);
 		gbc.gridx = 7;
 		gbc.gridy = 1;
-		controlPanel.add(structBtn,gbc);
+		controlPanel.add(pauseBtn,gbc);
 		gbc.gridx = 8;
 		gbc.gridy = 1;
-		controlPanel.add(startBtn,gbc);
+		controlPanel.add(structsBtn,gbc);
 		gbc.gridx = 9;
 		gbc.gridy = 0;
 		controlPanel.add(wwRB,gbc);
 		gbc.gridx = 9;
 		gbc.gridy = 1;
 		controlPanel.add(golRB,gbc);
+	}
+	
+	private void initIcons() {
+		homeIcon = new ImageIcon("src\\icons\\home_icon.png");
+		startIcon = new ImageIcon("src\\icons\\start_icon.png");
+		pauseIcon = new ImageIcon("src\\icons\\pause_icon.png");
+		structsIcon = new ImageIcon("src\\icons\\structs_icon.png");
 	}
 	
 	private void initAnimationTimers() {
@@ -222,10 +240,10 @@ public class MainWindow {
 	}
 	
 	private void initBoard() {
-		board = LoadBoardFromFile.loadBoardFromFile("exampleeeeee.life"); //kiedy nie chce wczytac z pliku podaje bledna nazwe aby nie komentowac bo moze sie pomylic i usunac
+		board = LoadBoardFromFile.loadBoardFromFile("example.life"); //kiedy nie chce wczytac z pliku podaje bledna nazwe aby nie komentowac bo moze sie pomylic i usunac
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2); // +2 dla paddingu 
-		board = new Board(12,32);
+		board = new Board(12,50); //moznaby bardziej wysrodkowac w pionie
 		rows = board.getRows(); 
 		cols = board.getCols();
 	}
@@ -250,7 +268,6 @@ public class MainWindow {
 	public int getCurrentSpeedLabel() {
 		return Integer.parseInt(currentSpeedLabel.getText());
 	}
-	
 	public void setCurrentSpeedLabel(int currentSpeed) {
 		currentSpeedLabel.setText(String.valueOf(currentSpeed));
 	}

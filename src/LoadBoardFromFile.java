@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 //uniwersalna klasa do wczytywania z pliku .life dla GOL oraz WW, potencjalnie rozszerzalna dla innej gry
 public class LoadBoardFromFile {
-	private static String sourceKuba = "C:\\Users\\Kuba\\eclipse-workspace\\WireWorld\\src\\";
+	private static String sourceKuba = "C:/Users/Kuba/Documents/GitHub/WireWorld/src";
 
 	public static Board loadBoardFromFile(String fileName) {
 		try {
