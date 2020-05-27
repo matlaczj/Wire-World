@@ -11,8 +11,7 @@ columns: 10
 0000000000
 0000000000
 0000000000
-+diode,0,0
-+electron,0,1
++6clock,2,2
 
 legend to numbers:
 	universal:

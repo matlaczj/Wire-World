@@ -1,11 +1,9 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.File;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.event.*;
 
 public class MainWindow {
 	private int rows;
@@ -74,11 +72,8 @@ public class MainWindow {
 		initAnimationTimers();
 		loadFromFileObject = new LoadBoardFromFile(chosenGame);
 		initBoard();
-		saveToFileObject = new SaveBoardToFile(board, chosenGame);
-		saveToFileObject.setChosenGame(chosenGame);
 		buildDisplayPanel();
 		loadFromFileObject = new LoadBoardFromFile(chosenGame);
-		saveToFileObject = new SaveBoardToFile(board, chosenGame);
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.setVisible(true);
 	}
@@ -360,6 +355,8 @@ public class MainWindow {
 //		board = new Board(50,50, chosenGame); //moznaby bardziej wysrodkowac w pionie gdy plansza jest poziomym prostokatem
 		rows = board.getRows(); 
 		cols = board.getCols();
+		saveToFileObject = new SaveBoardToFile(board, chosenGame);
+		saveToFileObject.setChosenGame(chosenGame);
 	}
 
 	private void buildDisplayPanel() { 
