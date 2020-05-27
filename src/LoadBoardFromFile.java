@@ -23,50 +23,66 @@ public class LoadBoardFromFile {
 				file = new File("src\\output_files\\wireworld\\" + fileName);
 			else 
 				return null; //jesli wybierzemy nieprawidlowy plik dla wybranego typu gry
-			String buffer;
+			
 			Scanner s = new Scanner(file); //uniwersalna sciezka, dzialajaca
 			s.next();
 			int rows = s.nextInt()+2; //+2 dla paddingu
 			s.next();
 			int cols = s.nextInt()+2;
 			Board board = new Board(rows, cols, chosenGame);
-			s.nextLine();
-			s.nextLine();
-			
-			int i = 0;
-			for(int j=0; j<cols; j++)
-				board.getCell(i, j).setState(C.PADD);
-			i = rows-1;
-			for(int j=0; j<cols; j++)
-				board.getCell(i, j).setState(C.PADD);
-			
-			for(i=1; i<rows-1; i++)
-			{
-				buffer = s.nextLine().trim();
-				for(int j=0; j<cols; j++)
-				{
-					if(j==0 || j==cols-1)
-					{
-						board.getCell(i, j).setState(C.PADD);
-						continue;
-					}
-					if(buffer.charAt(j-1)-'0' == (int)C.ON)
-						board.getCell(i, j).setState(C.ON);
-					else if(buffer.charAt(j-1)-'0' == (int)C.OFF)
-						board.getCell(i, j).setState(C.OFF);
-					else if(buffer.charAt(j-1)-'0' == (int)C.HEAD)
-						board.getCell(i, j).setState(C.HEAD);
-					else if(buffer.charAt(j-1)-'0' == (int)C.TAIL)
-						board.getCell(i, j).setState(C.TAIL);
-				}
-			}
 			s.close();
+			loadFileIntoBoard(board, file);
 			return board;
 		}
 		catch(FileNotFoundException ex) {
 			return null;
 		}
 		
+	}
+	
+	private void loadFileIntoBoard (Board board, File file) throws FileNotFoundException {
+		loadFileIntoBoard(board, file, 0, 0);
+	}
+	private void loadFileIntoBoard (Board board, File file, int x, int y) throws FileNotFoundException {
+		Scanner s = new Scanner(file);
+		s.next();
+		int fileRows = s.nextInt();
+		s.next();
+		int fileCols = s.nextInt();
+		s.nextLine();
+		s.nextLine();
+		String buffer;
+		int rows = board.getRows();
+		int cols = board.getCols();	
+		for(int i=1+x; i<1+x+fileRows && i<rows-1; i++)
+		{
+			buffer = s.nextLine().trim();
+			for(int j=1+y; j<1+y+fileCols && j<cols-1; j++)
+			{
+				if(j==0 || j==cols-1)
+					continue;
+				if(buffer.charAt(j-1)-'0' == (int)C.ON)
+					board.getCell(i+x, j+y).setState(C.ON);
+				else if(buffer.charAt(j-1)-'0' == (int)C.OFF)
+					board.getCell(i+x, j+y).setState(C.OFF);
+				else if(buffer.charAt(j-1)-'0' == (int)C.HEAD)
+					board.getCell(i+x, j+y).setState(C.HEAD);
+				else if(buffer.charAt(j-1)-'0' == (int)C.TAIL)
+					board.getCell(i+x, j+y).setState(C.TAIL);
+			}
+		}
+		String[] structCommand;
+		for(buffer = s.nextLine().trim(); buffer.length()!=0 && buffer.charAt(0) == '+'; buffer = s.nextLine().trim()) {
+			structCommand = buffer.substring(1).split(",",4);
+			if (structCommand.length < 3)
+				continue;
+			else if (structCommand.length == 3)
+				board.addStruct(structCommand[0], Integer.parseInt(structCommand[1]) + x, Integer.parseInt(structCommand[2]) + y);
+			else
+				board.addStruct(structCommand[0], Integer.parseInt(structCommand[1]) + x, Integer.parseInt(structCommand[2]) + y, structCommand[3]);
+		}
+		
+		s.close();
 	}
 	
 	public String getUsersCatalogPath() {

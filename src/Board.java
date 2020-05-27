@@ -114,5 +114,28 @@ public class Board {
 			count++;
 		return count;
 	}
+
+	public void addStruct(String name, int x, int y) {
+		addStruct(name, x, y, "RIGHT");
+	}
+
+	public void addStruct(String name, int x, int y, String direction) {
+		int dir = C.getStructDirection(direction);
+		if (chosenGame == C.WW)
+			addWWStruct(name, x, y, dir);
+		else if (chosenGame == C.GOL)
+			addGOLStruct(name, x, y, dir);
+	}
+
+	private void addGOLStruct(String name, int x, int y, int dir) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void addWWStruct(String name, int x, int y, int dir) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	
 }
