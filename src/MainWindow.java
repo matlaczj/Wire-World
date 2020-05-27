@@ -1,29 +1,9 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.TextArea;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTextField;
-import javax.swing.Timer;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -45,7 +25,10 @@ public class MainWindow {
 	private JButton structsBtn;
 	private JButton startBtn;
 	private JButton chooseFileToLoadBtn;
+	private JButton saveBtn;
+	private JButton chooseFileToSaveBtn;
 	private JFileChooser chooseFileToLoadFC;
+	private JFileChooser chooseFileToSaveFC;
 	
 	private JTextField rowsTA;
 	private JTextField columnsTA;
@@ -58,8 +41,6 @@ public class MainWindow {
 	private JLabel currentSpeedLabel;
 	
 	private JSlider speedSlider;
-	
-//	private ButtonGroup chooseGameBG;
 	
 	private Timer golAnimationTimer;
 	private Timer wwAnimationTimer;
@@ -149,46 +130,30 @@ public class MainWindow {
 		mainWindow.add(controlPanel);
 		mainWindow.add(displayPanel);
 		mainWindow.add(Box.createRigidArea(new Dimension(0,15)));	//troche luzu pod spodem
-		
-//		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		mainWindow.setVisible(true);
 	}
 	
-//	private void buildRadioButtons() {
-//		wwRB = new JRadioButton("WireWorld", false);
-//		golRB = new JRadioButton("Game Of Life", false);
-//		wwRB.addItemListener(new ItemListener() {
-//			@Override
-//			public void itemStateChanged(ItemEvent e) {
-//				chosenGame = C.WW;
-//				golAnimationTimer.stop(); //by zatrzymac przy zmianie rodzaju gry
-//				wwAnimationTimer.stop();
-//				saveToFileObject.setChosenGame(chosenGame); //aktualizuje typ gry w objekcie zapisujacym do pliku
-//			}
-//		});
-//		golRB.addItemListener(new ItemListener() {
-//			@Override
-//			public void itemStateChanged(ItemEvent e) {
-//				chosenGame = C.GOL;
-//				golAnimationTimer.stop();
-//				wwAnimationTimer.stop();
-//				saveToFileObject.setChosenGame(chosenGame);
-//			}
-//		});
-//		chooseGameBG = new ButtonGroup();
-//		chooseGameBG.add(wwRB);
-//		chooseGameBG.add(golRB);
-//	}
 	
 	private void buildFileChooser() {
-		chooseFileToLoadFC = new JFileChooser(new File(System.getProperty("user.dir")));
-		int result = chooseFileToLoadFC.showOpenDialog(null);
+		if (chooseFileToLoadFC == null)
+			chooseFileToLoadFC = new JFileChooser(new File(System.getProperty("user.dir")));
+		int result = chooseFileToLoadFC.showOpenDialog(mainWindow);
 		if(result == JFileChooser.APPROVE_OPTION) {		//musiałem przenieść do wewnątrz bo inaczej cancel czyścił planszę
 			loadFromFileObject.setUsersCatalogPath(chooseFileToLoadFC.getSelectedFile().getAbsolutePath());
 			initBoard();
 			buildDisplayPanel();
 			mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			mainWindow.setVisible(true);
+		}
+	}
+	
+	private void buildSaveFileChooser() {
+		if (chooseFileToSaveFC == null) {
+			chooseFileToSaveFC = new JFileChooser(new File(System.getProperty("user.dir")));
+			chooseFileToSaveFC.setSelectedFile(new File("example.wire"));
+		}
+		int result = chooseFileToSaveFC.showSaveDialog(mainWindow);
+		if(result == JFileChooser.APPROVE_OPTION) {		//musiałem przenieść do wewnątrz bo inaczej cancel czyścił planszę
+			saveToFileObject.saveBoardToFile(chooseFileToSaveFC.getSelectedFile().getAbsolutePath());
 		}
 	}
 	
@@ -208,6 +173,8 @@ public class MainWindow {
 		speedSlider = new JSlider(1,9,5);
 		currentSpeedLabel = new JLabel("5");
 		chooseFileToLoadBtn = new JButton("load state");
+		saveBtn = new JButton("save");
+		chooseFileToSaveBtn = new JButton("save as...");
 		
 		//to jest tylko po to aby ButtonClickListener mogl obslugiwac te przyciski bez dostepu do nich bezposrednio
 		goHomeBtn.setActionCommand("goHomeBtn");
@@ -215,7 +182,18 @@ public class MainWindow {
 		startBtn.setActionCommand("startBtn");
 		pauseBtn.setActionCommand("pauseBtn");
 		chooseFileToLoadBtn.setActionCommand("chooseFileToLoadBtn");
+		saveBtn.setActionCommand("saveBtn");
+		chooseFileToSaveBtn.setActionCommand("chooseFileToSaveBtn");
 		
+		goHomeBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				buildChoiceWindow();
+				golAnimationTimer.stop();
+				wwAnimationTimer.stop();
+			}
+		});
 		startBtn.addActionListener(new ActionListener() { //postanowilem przeniesc tutaj te Listenery poniewaz chcialem aby zmienne nie byly static a jednoczesnie nie chcialem wszystkiego pogmatwac
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -245,15 +223,17 @@ public class MainWindow {
 				buildFileChooser();
 			}
 		});
-		goHomeBtn.addActionListener(new ActionListener() {
-
+		saveBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				buildChoiceWindow();
-				golAnimationTimer.stop();
-				wwAnimationTimer.stop();
+				saveToFileObject.saveBoardToFile();
 			}
-			
+		});
+		chooseFileToSaveBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				buildSaveFileChooser();
+			}
 		});
 		
 		rowsTA.addActionListener(new ActionListener( ) {
@@ -298,48 +278,38 @@ public class MainWindow {
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		controlPanel.add(numOfGensLabel,gbc);
-		gbc.gridx = 1;
 		gbc.gridy = 1;
 		controlPanel.add(numOfGensTA,gbc);
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		controlPanel.add(rowsLabel,gbc);
-		gbc.gridx = 2;
 		gbc.gridy = 1;
 		controlPanel.add(rowsTA,gbc);
 		gbc.gridx = 3;
 		gbc.gridy = 0;
 		controlPanel.add(columnsLabel,gbc);
-		gbc.gridx = 3;
 		gbc.gridy = 1;
 		controlPanel.add(columnsTA,gbc);
 		gbc.gridx = 4;
 		gbc.gridy = 0;
 		controlPanel.add(speedLabel,gbc);
-		gbc.gridx = 4;
 		gbc.gridy = 1;
 		controlPanel.add(speedSlider,gbc);
-		gbc.gridx = 4;
 		gbc.gridy = 2;
 		controlPanel.add(currentSpeedLabel);
 		gbc.gridx = 6;
 		gbc.gridy = 1;
 		controlPanel.add(startBtn,gbc);
 		gbc.gridx = 7;
-		gbc.gridy = 1;
 		controlPanel.add(pauseBtn,gbc);
 		gbc.gridx = 8;
-		gbc.gridy = 1;
 		controlPanel.add(structsBtn,gbc);
-//		gbc.gridx = 9;
-//		gbc.gridy = 0;
-//		controlPanel.add(wwRB,gbc);
-//		gbc.gridx = 9;
-//		gbc.gridy = 1;
-//		controlPanel.add(golRB,gbc);
 		gbc.gridx = 9;
-		gbc.gridy = 1;
 		controlPanel.add(chooseFileToLoadBtn, gbc);
+		gbc.gridx = 10;
+		controlPanel.add(saveBtn, gbc);
+		gbc.gridx = 11;
+		controlPanel.add(chooseFileToSaveBtn, gbc);
 		
 		controlPanelHeight = controlPanel.getHeight();
 	}
@@ -384,7 +354,7 @@ public class MainWindow {
 	}
 	
 	private void initBoard() {
-		board = loadFromFileObject.loadBoardFromFile("testfile.wire"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
+		board = loadFromFileObject.loadBoardFromFile("notafile.wire"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2, chosenGame); // +2 dla paddingu
 //		board = new Board(50,50, chosenGame); //moznaby bardziej wysrodkowac w pionie gdy plansza jest poziomym prostokatem

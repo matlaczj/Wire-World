@@ -36,18 +36,31 @@ public class SaveBoardToFile {
 	}
 	
 	public void saveBoardToFile() {
+		saveBoardToFile("");
+	}
+	
+	public void saveBoardToFile(String filepath) {
 		try {
-			if(chosenGame == C.GOL) {
-				savedStatesCatalogPath = golSavedStatesCatalogPath;
-				savedStatesExtension = golSavedStatesExtension;
-				stateNumber = golStateNumber;
+			FileWriter fw;
+			
+			if (filepath == "") {
+				if(chosenGame == C.GOL) {
+					savedStatesCatalogPath = golSavedStatesCatalogPath;
+					savedStatesExtension = golSavedStatesExtension;
+					stateNumber = golStateNumber;
+					golStateNumber++;
+				}
+				if(chosenGame == C.WW) {
+					savedStatesCatalogPath = wwSavedStatesCatalogPath;
+					savedStatesExtension = wwSavedStatesExtension;
+					stateNumber = wwStateNumber;
+					wwStateNumber++;
+				}
+				fw = new FileWriter(new File(savedStatesCatalogPath + stateNumber + savedStatesExtension));
 			}
-			if(chosenGame == C.WW) {
-				savedStatesCatalogPath = wwSavedStatesCatalogPath;
-				savedStatesExtension = wwSavedStatesExtension;
-				stateNumber = wwStateNumber;
-			}
-			FileWriter fw = new FileWriter(new File(savedStatesCatalogPath + stateNumber + savedStatesExtension));
+			else
+				fw = new FileWriter(new File(filepath));
+			
 			fw.write("rows: " + (board.getRows()-2) + "\n");
 			fw.write("columns: " + (board.getCols()-2) + "\n");
 			fw.write("\n");
@@ -69,11 +82,6 @@ public class SaveBoardToFile {
 			fw.write("\n");
 			fw.write(legend);
 			fw.close();
-			
-			if(chosenGame == C.GOL)
-				golStateNumber++;
-			if(chosenGame == C.WW)
-				wwStateNumber++;
 		}
 		catch(IOException e){
 			;
