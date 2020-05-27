@@ -10,13 +10,10 @@ import java.awt.TextArea;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,12 +21,11 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.FileSystemView;
 
 public class MainWindow {
 	private int rows;
@@ -51,9 +47,9 @@ public class MainWindow {
 	private JButton chooseFileToLoadBtn;
 	private JFileChooser chooseFileToLoadFC;
 	
-	private TextArea rowsTA;
-	private TextArea columnsTA;
-	private TextArea numOfGensTA;
+	private JTextField rowsTA;
+	private JTextField columnsTA;
+	private JTextField numOfGensTA;
 	
 	private JLabel rowsLabel;
 	private JLabel columnsLabel;
@@ -63,7 +59,7 @@ public class MainWindow {
 	
 	private JSlider speedSlider;
 	
-	private ButtonGroup chooseGameBG;
+//	private ButtonGroup chooseGameBG;
 	
 	private Timer golAnimationTimer;
 	private Timer wwAnimationTimer;
@@ -202,9 +198,9 @@ public class MainWindow {
 		startBtn = new JButton(startIcon);
 		pauseBtn = new JButton(pauseIcon);
 		styleButtons();
-		rowsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE); 
-		columnsTA = new TextArea("10", 1, 4, TextArea.SCROLLBARS_NONE);
-		numOfGensTA = new TextArea("default value", 1, 5, TextArea.SCROLLBARS_NONE);
+		rowsTA = new JTextField("10", 1); 
+		columnsTA = new JTextField("10", 1);
+		numOfGensTA = new JTextField("default value", 1);
 		rowsLabel = new JLabel("  rows:");
 		columnsLabel = new JLabel("columns:");
 		numOfGensLabel = new JLabel("nr of generations:");
@@ -259,6 +255,39 @@ public class MainWindow {
 			}
 			
 		});
+		
+		rowsTA.addActionListener(new ActionListener( ) {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				initBoard();
+				buildDisplayPanel();
+				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				mainWindow.setVisible(true);
+			}
+			
+		});
+		columnsTA.addActionListener(new ActionListener( ) {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				initBoard();
+				buildDisplayPanel();
+				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				mainWindow.setVisible(true);
+			}
+			
+		});
+		numOfGensTA.addActionListener(new ActionListener( ) {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -339,7 +368,7 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				board.calculateNextStateGOL();
 				board.updateBoard();
-				saveToFileObject.saveBoardToFile(); //obecnie zapisuje kazdy nowy stan
+//				saveToFileObject.saveBoardToFile(); //obecnie zapisuje kazdy nowy stan
 				//golAnimationTimer.setDelay(getCurrentSpeedLabel()); // to chyba niezbyt dziala trudno mi okreslic, mam wrazenie ze spowalnia
 			}
 		});
@@ -348,14 +377,14 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				board.calculateNextStateWW();
 				board.updateBoard();
-				saveToFileObject.saveBoardToFile();
+//				saveToFileObject.saveBoardToFile();
 				//golAnimationTimer.setDelay(getCurrentSpeedLabel());
 			}
 		});
 	}
 	
 	private void initBoard() {
-		board = loadFromFileObject.loadBoardFromFile("example.life"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
+		board = loadFromFileObject.loadBoardFromFile("notafile.life"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2, chosenGame); // +2 dla paddingu
 //		board = new Board(50,50, chosenGame); //moznaby bardziej wysrodkowac w pionie gdy plansza jest poziomym prostokatem
