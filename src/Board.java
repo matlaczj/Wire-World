@@ -5,6 +5,7 @@ public class Board {
 	private int cols;
 	private Cell[][] board;
 	private byte chosenGame;
+	private LoadBoardFromFile fileLoader;
 	
 	public Board(int rows, int cols, byte chosenGame) {
 		this.rows = rows;
@@ -120,19 +121,20 @@ public class Board {
 	}
 
 	public void addStruct(String name, int x, int y, String direction) {
-		int dir = C.getStructDirection(direction);
+		byte dir = C.getStructDirection(direction);
+		fileLoader = new LoadBoardFromFile(chosenGame);
 		if (chosenGame == C.WW)
 			addWWStruct(name, x, y, dir);
 		else if (chosenGame == C.GOL)
 			addGOLStruct(name, x, y, dir);
 	}
 
-	private void addGOLStruct(String name, int x, int y, int dir) {
+	private void addGOLStruct(String name, int x, int y, byte dir) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void addWWStruct(String name, int x, int y, int dir) {
+	private void addWWStruct(String name, int x, int y, byte dir) {
 		// TODO Auto-generated method stub
 		
 	}
