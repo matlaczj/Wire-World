@@ -40,8 +40,7 @@ public class MainWindow {
 	
 	private JSlider speedSlider;
 	
-	private Timer golAnimationTimer;
-	private Timer wwAnimationTimer;
+	private Timer animationTimer;
 	
 	private Icon homeIcon;
 	private Icon pauseIcon;
@@ -165,8 +164,8 @@ public class MainWindow {
 		columnsLabel = new JLabel("columns:");
 		numOfGensLabel = new JLabel("nr of generations:");
 		speedLabel = new JLabel("  animation speed:");
-		speedSlider = new JSlider(1,9,5);
-		currentSpeedLabel = new JLabel("5");
+		speedSlider = new JSlider(1,20,10);
+		currentSpeedLabel = new JLabel("10");
 		chooseFileToLoadBtn = new JButton("load state");
 		saveBtn = new JButton("save");
 		chooseFileToSaveBtn = new JButton("save as...");
@@ -185,24 +184,19 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buildChoiceWindow();
-				golAnimationTimer.stop();
-				wwAnimationTimer.stop();
+				animationTimer.stop();
 			}
 		});
 		startBtn.addActionListener(new ActionListener() { //postanowilem przeniesc tutaj te Listenery poniewaz chcialem aby zmienne nie byly static a jednoczesnie nie chcialem wszystkiego pogmatwac
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(chosenGame == C.GOL)
-					golAnimationTimer.start();
-				if(chosenGame == C.WW)
-					wwAnimationTimer.start();
+				animationTimer.start();
 			}
 		});
 		pauseBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				golAnimationTimer.stop();
-				wwAnimationTimer.stop();
+				animationTimer.stop();
 			}
 		});
 		speedSlider.addChangeListener(new ChangeListener() {
@@ -210,6 +204,7 @@ public class MainWindow {
 			public void stateChanged(ChangeEvent e) {
 				int currentSpeed = ((JSlider)e.getSource()).getValue();
 				setCurrentSpeedLabel(currentSpeed);
+				animationTimer.setDelay(1000/getCurrentSpeedLabel());
 			}
 		});
 		chooseFileToLoadBtn.addActionListener(new ActionListener() {
@@ -330,22 +325,15 @@ public class MainWindow {
 	}
 	
 	private void initAnimationTimers() {
-		golAnimationTimer = new Timer(getCurrentSpeedLabel()*10 , new ActionListener() {
+		animationTimer = new Timer(1000/getCurrentSpeedLabel() , new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				board.calculateNextStateGOL();
+				if (chosenGame == C.GOL)
+					board.calculateNextStateGOL();
+				else if (chosenGame == C.WW)
+					board.calculateNextStateWW();
 				board.updateBoard();
 //				saveToFileObject.saveBoardToFile(); //obecnie zapisuje kazdy nowy stan
-				//golAnimationTimer.setDelay(getCurrentSpeedLabel()); // to chyba niezbyt dziala trudno mi okreslic, mam wrazenie ze spowalnia
-			}
-		});
-        wwAnimationTimer = new Timer(getCurrentSpeedLabel()*10 , new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				board.calculateNextStateWW();
-				board.updateBoard();
-//				saveToFileObject.saveBoardToFile();
-				//golAnimationTimer.setDelay(getCurrentSpeedLabel());
 			}
 		});
 	}
