@@ -10,6 +10,8 @@ public class MainWindow {
 	private int cols;
 	private int cellSideSize;
 	private byte chosenGame;
+	private int n;	//liczba generacji
+	private boolean isInfinite = true; //czy ma isc w nieskonczonosc
 	private SaveBoardToFile saveToFileObject;
 	private LoadBoardFromFile loadFromFileObject;
 	
@@ -159,10 +161,10 @@ public class MainWindow {
 		styleButtons();
 		rowsTA = new JTextField("10", 1); 
 		columnsTA = new JTextField("10", 1);
-		numOfGensTA = new JTextField("default value", 1);
+		numOfGensTA = new JTextField("", 1);
 		rowsLabel = new JLabel("  rows:");
 		columnsLabel = new JLabel("columns:");
-		numOfGensLabel = new JLabel("nr of generations:");
+		numOfGensLabel = new JLabel("no. of generations:");
 		speedLabel = new JLabel("  animation speed:");
 		speedSlider = new JSlider(1,20,10);
 		currentSpeedLabel = new JLabel("10");
@@ -190,6 +192,15 @@ public class MainWindow {
 		startBtn.addActionListener(new ActionListener() { //postanowilem przeniesc tutaj te Listenery poniewaz chcialem aby zmienne nie byly static a jednoczesnie nie chcialem wszystkiego pogmatwac
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if ( numOfGensTA.getText() == "" )
+					isInfinite = true;
+				else
+					try {
+					n = Integer.parseInt(numOfGensTA.getText());
+					isInfinite = false;
+					} catch (NumberFormatException e1) {
+						isInfinite = true;
+					}
 				animationTimer.start();
 			}
 		});
@@ -254,8 +265,15 @@ public class MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				if ( numOfGensTA.getText() == "" )
+					isInfinite = true;
+				else
+					try {
+					n = Integer.parseInt(numOfGensTA.getText());
+					isInfinite = false;
+					} catch (NumberFormatException e1) {
+						isInfinite = true;
+					}
 			}
 			
 		});
@@ -328,12 +346,18 @@ public class MainWindow {
 		animationTimer = new Timer(1000/getCurrentSpeedLabel() , new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (chosenGame == C.GOL)
-					board.calculateNextStateGOL();
-				else if (chosenGame == C.WW)
-					board.calculateNextStateWW();
-				board.updateBoard();
-//				saveToFileObject.saveBoardToFile(); //obecnie zapisuje kazdy nowy stan
+				if (isInfinite || n>0 ) {
+					if (chosenGame == C.GOL)
+						board.calculateNextStateGOL();
+					else if (chosenGame == C.WW)
+						board.calculateNextStateWW();
+					board.updateBoard();
+					if (!isInfinite) {
+						n--;
+						numOfGensTA.setText(Integer.toString(n));
+					}
+//					saveToFileObject.saveBoardToFile(); //obecnie zapisuje kazdy nowy stan
+				}
 			}
 		});
 	}
