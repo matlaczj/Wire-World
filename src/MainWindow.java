@@ -185,7 +185,7 @@ public class MainWindow {
 //	}
 	
 	private void buildFileChooser() {
-		chooseFileToLoadFC = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		chooseFileToLoadFC = new JFileChooser(new File(System.getProperty("user.dir")));
 		int result = chooseFileToLoadFC.showOpenDialog(null);
 		if(result == JFileChooser.APPROVE_OPTION) {		//musiałem przenieść do wewnątrz bo inaczej cancel czyścił planszę
 			loadFromFileObject.setUsersCatalogPath(chooseFileToLoadFC.getSelectedFile().getAbsolutePath());
