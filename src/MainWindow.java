@@ -68,7 +68,6 @@ public class MainWindow {
 	
 	private void setupWindow() {
 		buildMainWindow();
-//		buildRadioButtons();
 		buildControlPanel();
 		initAnimationTimers();
 		loadFromFileObject = new LoadBoardFromFile(chosenGame);
