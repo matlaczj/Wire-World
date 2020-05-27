@@ -235,6 +235,7 @@ public class MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				loadFromFileObject.setUsersCatalogPath("");
 				initBoard();
 				buildDisplayPanel();
 				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -246,6 +247,7 @@ public class MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				loadFromFileObject.setUsersCatalogPath("");
 				initBoard();
 				buildDisplayPanel();
 				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
