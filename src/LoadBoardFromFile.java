@@ -67,8 +67,8 @@ public class LoadBoardFromFile {
 			{
 				if(buffer.charAt(j-1)-'0' == (int)C.ON)
 					board.getCell(i+y, j+x).setState(C.ON);
-				else if(buffer.charAt(j-1)-'0' == (int)C.OFF)
-					board.getCell(i+y, j+x).setState(C.OFF);
+//				else if(buffer.charAt(j-1)-'0' == (int)C.OFF)
+//					board.getCell(i+y, j+x).setState(C.OFF);
 				else if(buffer.charAt(j-1)-'0' == (int)C.HEAD)
 					board.getCell(i+y, j+x).setState(C.HEAD);
 				else if(buffer.charAt(j-1)-'0' == (int)C.TAIL)
