@@ -43,6 +43,7 @@ public class LoadBoardFromFile {
 	private void loadFileIntoBoard (Board board, File file) throws FileNotFoundException {
 		loadFileIntoBoard(board, file, 0, 0);
 	}
+	
 	private void loadFileIntoBoard (Board board, File file, int x, int y) throws FileNotFoundException {	
 		//this method loads the file into the board at position (x,y)
 		Scanner s = new Scanner(file);
@@ -55,13 +56,11 @@ public class LoadBoardFromFile {
 		String buffer;
 		int rows = board.getRows();
 		int cols = board.getCols();	
-		for(int i=1+x; i<1+x+fileRows && i<rows-1; i++)
+		for(int i=1; i<1+fileRows && i<rows-1; i++)
 		{
 			buffer = s.nextLine().trim();
-			for(int j=1+y; j<1+y+fileCols && j<cols-1; j++)
+			for(int j=1; j<1+fileCols && j<cols-1; j++)
 			{
-				if(j==0 || j==cols-1)
-					continue;
 				if(buffer.charAt(j-1)-'0' == (int)C.ON)
 					board.getCell(i+x, j+y).setState(C.ON);
 				else if(buffer.charAt(j-1)-'0' == (int)C.OFF)
