@@ -18,9 +18,9 @@ public class LoadBoardFromFile {
 				file = new File(usersCatalogPath);
 			}
 			else if(chosenGame == C.GOL)
-				file = new File("src\\saved_states\\gol_saved_states\\" + fileName);
+				file = new File("src\\output_files\\gameoflife\\" + fileName);
 			else if(chosenGame == C.WW)
-				file = new File("src\\saved_states\\ww_saved_states\\" + fileName);
+				file = new File("src\\output_files\\wireworld\\" + fileName);
 			else 
 				return null; //jesli wybierzemy nieprawidlowy plik dla wybranego typu gry
 			String buffer;

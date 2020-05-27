@@ -29,9 +29,9 @@ public class SaveBoardToFile {
 				"	for WW only:\r\n" + 
 				"		HEAD = 2\r\n" + 
 				"		TAIL = 3";
-		golSavedStatesCatalogPath = "src\\saved_states\\gol_saved_states\\gol_state_"; //kiedys bedzie mozna ja wybrac dowolna w gui
+		golSavedStatesCatalogPath = "src\\output_files\\gameoflife\\output"; //kiedys bedzie mozna ja wybrac dowolna w gui
 		golSavedStatesExtension = ".life";
-		wwSavedStatesCatalogPath = "src\\saved_states\\ww_saved_states\\ww_state_";
+		wwSavedStatesCatalogPath = "src\\output_files\\wireworld\\output";
 		wwSavedStatesExtension = ".wire";
 	}
 	
