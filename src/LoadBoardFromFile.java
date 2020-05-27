@@ -43,7 +43,8 @@ public class LoadBoardFromFile {
 	private void loadFileIntoBoard (Board board, File file) throws FileNotFoundException {
 		loadFileIntoBoard(board, file, 0, 0);
 	}
-	private void loadFileIntoBoard (Board board, File file, int x, int y) throws FileNotFoundException {
+	private void loadFileIntoBoard (Board board, File file, int x, int y) throws FileNotFoundException {	
+		//this method loads the file into the board at position (x,y)
 		Scanner s = new Scanner(file);
 		s.next();
 		int fileRows = s.nextInt();
