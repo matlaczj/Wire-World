@@ -1,4 +1,6 @@
 import java.awt.Dimension;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Board {
 	private int rows;
@@ -6,6 +8,7 @@ public class Board {
 	private Cell[][] board;
 	private byte chosenGame;
 	private LoadBoardFromFile fileLoader;
+	private File file;
 	
 	public Board(int rows, int cols, byte chosenGame) {
 		this.rows = rows;
@@ -116,27 +119,18 @@ public class Board {
 		return count;
 	}
 
-	public void addStruct(String name, int x, int y) {
+	public void addStruct(String name, int x, int y) throws FileNotFoundException {
 		addStruct(name, x, y, "RIGHT");
 	}
 
-	public void addStruct(String name, int x, int y, String direction) {
+	public void addStruct(String name, int x, int y, String direction) throws FileNotFoundException {
 		byte dir = C.getStructDirection(direction);
 		fileLoader = new LoadBoardFromFile(chosenGame);
 		if (chosenGame == C.WW)
-			addWWStruct(name, x, y, dir);
+			file = new File("src\\structures\\wireworld\\" + name + ".wire");
 		else if (chosenGame == C.GOL)
-			addGOLStruct(name, x, y, dir);
-	}
-
-	private void addGOLStruct(String name, int x, int y, byte dir) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void addWWStruct(String name, int x, int y, byte dir) {
-		// TODO Auto-generated method stub
-		
+			file = new File("src\\structures\\gameoflife\\" + name + ".life");
+		fileLoader.loadStructFromFile(this, file, x, y, dir);
 	}
 	
 	

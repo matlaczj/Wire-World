@@ -40,6 +40,10 @@ public class LoadBoardFromFile {
 		
 	}
 	
+	public void loadStructFromFile(Board board, File file, int x, int y, byte dir) throws FileNotFoundException {
+		loadFileIntoBoard(board, file, x, y);
+	}
+	
 	private void loadFileIntoBoard (Board board, File file) throws FileNotFoundException {
 		loadFileIntoBoard(board, file, 0, 0);
 	}
@@ -62,13 +66,13 @@ public class LoadBoardFromFile {
 			for(int j=1; j<1+fileCols && j<cols-1; j++)
 			{
 				if(buffer.charAt(j-1)-'0' == (int)C.ON)
-					board.getCell(i+x, j+y).setState(C.ON);
+					board.getCell(i+y, j+x).setState(C.ON);
 				else if(buffer.charAt(j-1)-'0' == (int)C.OFF)
-					board.getCell(i+x, j+y).setState(C.OFF);
+					board.getCell(i+y, j+x).setState(C.OFF);
 				else if(buffer.charAt(j-1)-'0' == (int)C.HEAD)
-					board.getCell(i+x, j+y).setState(C.HEAD);
+					board.getCell(i+y, j+x).setState(C.HEAD);
 				else if(buffer.charAt(j-1)-'0' == (int)C.TAIL)
-					board.getCell(i+x, j+y).setState(C.TAIL);
+					board.getCell(i+y, j+x).setState(C.TAIL);
 			}
 		}
 		String[] structCommand;
@@ -84,6 +88,8 @@ public class LoadBoardFromFile {
 		
 		s.close();
 	}
+	
+	
 	
 	public String getUsersCatalogPath() {
 		return usersCatalogPath;
