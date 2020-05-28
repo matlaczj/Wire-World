@@ -61,7 +61,14 @@ public class StructPanel extends JPanel {
 		mirrorBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				dir += 4;
+				dir %= 8;
+				loadFromFileObject.setUsersCatalogPath(filename);
+				setupDisplayPanel();
+				setupLayout();
+				setVisible(true);
+				parent.mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				parent.mainWindow.setVisible(true);
 			}
 		});
 	}

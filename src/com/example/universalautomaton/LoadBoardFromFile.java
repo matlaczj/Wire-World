@@ -56,10 +56,43 @@ public class LoadBoardFromFile {
 	}
 	
 	public void loadStructFromFile(Board board, File file, int x, int y, byte dir) throws FileNotFoundException {
+		Scanner s = new Scanner(file); //uniwersalna sciezka, dzialajaca
+		int rows, cols;
+		s.next();
+			if(dir%2 == 0) {
+				rows = s.nextInt();
+				s.next();
+				cols = s.nextInt();
+			}
+			else{
+				cols = s.nextInt();
+				s.next();
+				rows = s.nextInt();
+			}
+		s.close();
+	
+		switch(dir) {
+		case Directions.RR:
+			y -= cols-2;
+			break;
+		case Directions.L:
+			y -= cols-2;
+		case Directions.LR:
+			x -= rows;		//to zarowno dla L jak i LR, celowo nie dalem breaka
+			break;
+		case Directions.D:
+			x -= cols-1;
+			break;
+		case Directions.UR:
+			x -= cols-1;
+		case Directions.U:
+			y -= rows-1;
+			break;
+		}
 		loadFileIntoBoard(board, file, x, y, dir);
 	}
 	
-	private void loadFileIntoBoard (Board board, File file, int x, int y, byte dir) throws FileNotFoundException {	
+	public void loadFileIntoBoard (Board board, File file, int x, int y, byte dir) throws FileNotFoundException {	
 		//ta metoda laduje plik do planszy zaczynajac od pozycji (x,y)
 		Scanner s = new Scanner(file);
 		s.next();
@@ -74,10 +107,47 @@ public class LoadBoardFromFile {
 			structCommand = buffer.substring(1).split(",",4);
 			if (structCommand.length < 3)
 				continue;
-			else if (structCommand.length == 3)
-				board.addStruct(structCommand[0], Integer.parseInt(structCommand[1]) + x, Integer.parseInt(structCommand[2]) + y);
+			int xins=0, yins=0;		// pozycja wczytywanej struktury wewnętrznej
+			int i = Integer.parseInt(structCommand[2]);
+			int j = Integer.parseInt(structCommand[1]);
+			switch(dir) {
+			case Directions.R:
+				xins = x + j;
+				yins = y + i;
+				break;
+			case Directions.RR:
+				xins = x + j;
+				yins = fileRows-i-1+y;
+				break;
+			case Directions.L:
+				xins = fileCols-j-1+x;
+				yins = fileRows-i-1+y;
+				break;
+			case Directions.LR:
+				xins = fileCols-j-1+x;
+				yins = y + i;
+				break;
+			case Directions.D:
+				xins = fileRows-i-1+x;
+				yins = y + j;
+				break;
+			case Directions.DR:
+				xins = x + i;
+				yins = y + j;
+				break;
+			case Directions.U:
+				xins = x + i;
+				yins = fileCols-j-1+y;
+				break;
+			case Directions.UR:
+				xins = fileRows-i-1+x;
+				yins = fileCols-j-1+y;
+				break;
+			}
+			if (structCommand.length == 3)
+				board.addStruct(structCommand[0], xins, yins, dir);
 			else
-				board.addStruct(structCommand[0], Integer.parseInt(structCommand[1]) + x, Integer.parseInt(structCommand[2]) + y, structCommand[3]);
+				board.addStruct(structCommand[0], xins, yins, structCommand[3], dir);
 		}
 		
 		s.close();

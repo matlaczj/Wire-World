@@ -101,12 +101,13 @@ public class Board {
 			}
 		}
 
-	public void addStruct(String name, int x, int y) throws FileNotFoundException {
-		addStruct(name, x, y, "RIGHT");
+	public void addStruct(String name, int x, int y, byte dirOrigin) throws FileNotFoundException {
+		addStruct(name, x, y, "RIGHT", dirOrigin);
 	}
 
-	public void addStruct(String name, int x, int y, String direction) throws FileNotFoundException {
-		byte dir = Directions.getStructDirection(direction);
+	public void addStruct(String name, int x, int y, String direction, byte dirOrigin) throws FileNotFoundException {
+		byte mir = (byte) ((Directions.getStructDirection(direction) / 4 + dirOrigin / 4) % 2);
+		byte dir = (byte) (mir*4 + (Directions.getStructDirection(direction) + dirOrigin) % 4);
 		fileLoader = new LoadBoardFromFile(chosenGame);
 		if (chosenGame == C.WW)
 			file = new File("src\\structures\\wireworld\\" + name + ".wire");
@@ -125,6 +126,7 @@ public class Board {
 			{
 				board[i][j].removeActionListener(bcl);
 				board[i][j].removeMouseListener(bdl);
+				board[i][j].removeActionListener(tmpl);
 				board[i][j].addActionListener(l);
 				board[i][j].setActionCommand(i + " " + j);
 			}
@@ -135,6 +137,8 @@ public class Board {
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
 			{
+				board[i][j].removeActionListener(bcl);
+				board[i][j].removeMouseListener(bdl);
 				board[i][j].removeActionListener(tmpl);
 				if(i==0 || j==0 || i==rows-1 || j==cols-1)
 					continue;

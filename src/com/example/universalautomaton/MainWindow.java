@@ -395,6 +395,7 @@ public class MainWindow {
 	}
 	
 	private void buildStructsWindow() {
+		board.restoreListeners();
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().repaint();
 		mainWindow.setLayout(new GridLayout(0,6));
@@ -453,7 +454,7 @@ public class MainWindow {
 				int y = Integer.parseInt(position[0]);
 				int x = Integer.parseInt(position[1]);
 				try {
-					loadFromFileObject.loadStructFromFile(board, file, x - j, y - i, dir);
+					loadFromFileObject.loadFileIntoBoard(board, file, x - j, y - i, dir);
 					board.restoreListeners();
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
