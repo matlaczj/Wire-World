@@ -1,3 +1,4 @@
+package com.example.universalautomaton;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -124,7 +125,7 @@ public class Board {
 	}
 
 	public void addStruct(String name, int x, int y, String direction) throws FileNotFoundException {
-		byte dir = C.getStructDirection(direction);
+		byte dir = Directions.getStructDirection(direction);
 		fileLoader = new LoadBoardFromFile(chosenGame);
 		if (chosenGame == C.WW)
 			file = new File("src\\structures\\wireworld\\" + name + ".wire");

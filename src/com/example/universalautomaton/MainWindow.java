@@ -1,3 +1,4 @@
+package com.example.universalautomaton;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -321,7 +322,7 @@ public class MainWindow {
 			chooseFileToSaveFC.setSelectedFile(new File("example.wire"));
 		}
 		int result = chooseFileToSaveFC.showSaveDialog(mainWindow);
-		if(result == JFileChooser.APPROVE_OPTION) {		//musiałem przenieść do wewnątrz bo inaczej cancel czyścił planszę
+		if(result == JFileChooser.APPROVE_OPTION) {
 			saveToFileObject.saveBoardToFile(chooseFileToSaveFC.getSelectedFile().getAbsolutePath());
 		}
 	}
@@ -361,7 +362,6 @@ public class MainWindow {
 		board = loadFromFileObject.loadBoardFromFile("notafile.wire"); //juz dziala, sciezka jest juz uniwersalna, wyzszy piorytet ma wybor uzytkownika
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2, chosenGame); // +2 dla paddingu
-//		board = new Board(50,50, chosenGame); //moznaby bardziej wysrodkowac w pionie gdy plansza jest poziomym prostokatem
 		rows = board.getRows(); 
 		cols = board.getCols();
 		saveToFileObject = new SaveBoardToFile(board, chosenGame);

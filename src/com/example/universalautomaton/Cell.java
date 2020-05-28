@@ -1,3 +1,4 @@
+package com.example.universalautomaton;
 import java.awt.Color;
 
 import javax.swing.JButton;

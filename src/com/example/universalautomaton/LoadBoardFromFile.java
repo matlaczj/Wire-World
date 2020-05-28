@@ -1,3 +1,4 @@
+package com.example.universalautomaton;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -49,7 +50,7 @@ public class LoadBoardFromFile {
 	}
 	
 	private void loadFileIntoBoard (Board board, File file, int x, int y) throws FileNotFoundException {	
-		//this method loads the file into the board at position (x,y)
+		//ta metoda laduje plik do planszy zaczynajac od pozycji (x,y)
 		Scanner s = new Scanner(file);
 		s.next();
 		int fileRows = s.nextInt();
