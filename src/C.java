@@ -12,11 +12,11 @@ public class C { //constants
 	public static final byte D = 1;	//down
 	public static final byte L = 2;	//left
 	public static final byte U = 3;	//up
-	public static final byte RR = 4;	//those with R are the same as above but also mirrored
+	public static final byte RR = 4;	//those with R are the same as above but also mirrored //czemu nagle komenarze po ang? niekonsekwencje tworza balagan
 	public static final byte DR = 5;
 	public static final byte LR = 6;
 	public static final byte UR = 7;
-	public static final byte getStructDirection (String name) {
+	public static final byte getStructDirection (String name) { //C mialo by klasa do stalych a nie z metodami, to niezbyt dobra praktyka
 		switch(name) {
 		case "RIGHT":
 			return 0;

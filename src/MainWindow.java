@@ -27,6 +27,9 @@ public class MainWindow {
 	private JButton chooseFileToLoadBtn;
 	private JButton saveBtn;
 	private JButton chooseFileToSaveBtn;
+	private JButton choiceWWBtn; // konwencja jest przydatna wiec dodaje Btn ma koncu
+	private JButton choiceGoLBtn;
+	
 	private JFileChooser chooseFileToLoadFC;
 	private JFileChooser chooseFileToSaveFC;
 	
@@ -49,21 +52,48 @@ public class MainWindow {
 	private Icon startIcon;
 	private Icon structsIcon;
 	
-	private JButton choiceWWBtn; // konwencja jest przydatna wiec dodaje Btn ma koncu
-	private JButton choiceGoLBtn;
-	
 	private Dimension screenSize;
 	private int controlPanelHeight;
-	
 	private Color bgColor = new Color(238,238,238); //kolor domyslnego tla okna aplikacji
 	
 	
 	public MainWindow() {
-		initIcons();
+		initIcons(); //pozostawiam tutaj gdybysmy chcieli dac ikony na okno wyboru gry, inaczej dalbym na poczatek buildControlPanel
 		mainWindow = new JFrame("Uniwersalny automat komorkowy");
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainWindow.setMaximumSize(screenSize);
 		buildChoiceWindow();
+	}
+	
+	private void buildChoiceWindow() {
+		mainWindow.setSize(600, 400);
+		mainWindow.getContentPane().removeAll();
+		mainWindow.getContentPane().repaint();
+		mainWindow.setLayout(new BorderLayout());
+		
+		choiceWWBtn = new JButton("WireWorld");
+		choiceGoLBtn = new JButton("Game of Life");
+		choiceWWBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chosenGame = C.WW;
+				setupWindow();
+			}
+		});
+		choiceGoLBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chosenGame = C.GOL;
+				setupWindow();
+			}
+		});
+		choiceWWBtn.setPreferredSize(new Dimension(mainWindow.getWidth()/2, mainWindow.getHeight()));
+		choiceGoLBtn.setPreferredSize(new Dimension(mainWindow.getWidth()/2, mainWindow.getHeight()));
+		mainWindow.add(choiceWWBtn, BorderLayout.WEST);
+		mainWindow.add(choiceGoLBtn, BorderLayout.EAST);
+		
+		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainWindow.setVisible(true); 
 	}
 	
 	private void setupWindow() {
@@ -78,41 +108,6 @@ public class MainWindow {
 		mainWindow.setVisible(true);
 	}
 	
-	private void buildChoiceWindow() {
-		mainWindow.setSize(600, 400);
-		mainWindow.getContentPane().removeAll();
-		mainWindow.getContentPane().repaint();
-		mainWindow.setLayout(new BorderLayout());
-		
-		choiceWWBtn = new JButton("WireWorld");
-		choiceGoLBtn = new JButton("Game of Life");
-		choiceWWBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				chosenGame = C.WW;
-				setupWindow();
-			}
-			
-		});
-		choiceGoLBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				chosenGame = C.GOL;
-				setupWindow();
-			}
-			
-		});
-		choiceWWBtn.setPreferredSize(new Dimension(mainWindow.getWidth()/2, mainWindow.getHeight()));
-		choiceGoLBtn.setPreferredSize(new Dimension(mainWindow.getWidth()/2, mainWindow.getHeight()));
-		mainWindow.add(choiceWWBtn, BorderLayout.WEST);
-		mainWindow.add(choiceGoLBtn, BorderLayout.EAST);
-		
-		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainWindow.setVisible(true); 
-	}
-	
 	private void buildMainWindow() {
 		mainWindow.setSize(screenSize);
 		mainWindow.getContentPane().removeAll();
@@ -125,31 +120,6 @@ public class MainWindow {
 		mainWindow.add(controlPanel);
 		mainWindow.add(displayPanel);
 		mainWindow.add(Box.createRigidArea(new Dimension(0,15)));	//troche luzu pod spodem
-	}
-	
-	
-	private void buildFileChooser() {
-		if (chooseFileToLoadFC == null)
-			chooseFileToLoadFC = new JFileChooser(new File(System.getProperty("user.dir")));
-		int result = chooseFileToLoadFC.showOpenDialog(mainWindow);
-		if(result == JFileChooser.APPROVE_OPTION) {		//musiałem przenieść do wewnątrz bo inaczej cancel czyścił planszę
-			loadFromFileObject.setUsersCatalogPath(chooseFileToLoadFC.getSelectedFile().getAbsolutePath());
-			initBoard();
-			buildDisplayPanel();
-			mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			mainWindow.setVisible(true);
-		}
-	}
-	
-	private void buildSaveFileChooser() {
-		if (chooseFileToSaveFC == null) {
-			chooseFileToSaveFC = new JFileChooser(new File(System.getProperty("user.dir")));
-			chooseFileToSaveFC.setSelectedFile(new File("example.wire"));
-		}
-		int result = chooseFileToSaveFC.showSaveDialog(mainWindow);
-		if(result == JFileChooser.APPROVE_OPTION) {		//musiałem przenieść do wewnątrz bo inaczej cancel czyścił planszę
-			saveToFileObject.saveBoardToFile(chooseFileToSaveFC.getSelectedFile().getAbsolutePath());
-		}
 	}
 	
 	private void buildControlPanel() {
@@ -220,7 +190,7 @@ public class MainWindow {
 		chooseFileToLoadBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				buildFileChooser();
+				buildLoadFileChooser();
 			}
 		});
 		saveBtn.addActionListener(new ActionListener() {
@@ -235,9 +205,7 @@ public class MainWindow {
 				buildSaveFileChooser();
 			}
 		});
-		
 		rowsTA.addActionListener(new ActionListener( ) {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				loadFromFileObject.setUsersCatalogPath("");
@@ -246,10 +214,8 @@ public class MainWindow {
 				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				mainWindow.setVisible(true);
 			}
-			
 		});
 		columnsTA.addActionListener(new ActionListener( ) {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				loadFromFileObject.setUsersCatalogPath("");
@@ -258,10 +224,8 @@ public class MainWindow {
 				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				mainWindow.setVisible(true);
 			}
-			
 		});
 		numOfGensTA.addActionListener(new ActionListener( ) {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if ( numOfGensTA.getText() == "" )
@@ -274,10 +238,7 @@ public class MainWindow {
 						isNumOfGensFinite = true;
 					}
 			}
-			
 		});
-		
-		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(0,1,0,1);
@@ -319,15 +280,50 @@ public class MainWindow {
 		controlPanel.add(saveBtn, gbc);
 		gbc.gridx = 11;
 		controlPanel.add(chooseFileToSaveBtn, gbc);
-		
 		controlPanelHeight = controlPanel.getHeight();
 	}
 	
-	private void initIcons() {
-		homeIcon = new ImageIcon("src\\icons\\home_icon.png");
-		startIcon = new ImageIcon("src\\icons\\start_icon.png");
-		pauseIcon = new ImageIcon("src\\icons\\pause_icon.png");
-		structsIcon = new ImageIcon("src\\icons\\structs_icon.png");
+	private void buildDisplayPanel() { 
+		displayPanel.removeAll();
+		displayPanel.setSize(mainWindow.getWidth() - 15, mainWindow.getHeight() - controlPanelHeight - 15);
+		
+		cellSideSize = (displayPanel.getSize().height)/rows*9/10;	
+		if (displayPanel.getSize().width/cols < cellSideSize)
+			cellSideSize = displayPanel.getSize().width/cols;		//na wypadek gdyby plansza nie miescila sie w poziomie
+		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
+		for(int i=0; i<rows; i++)
+			for(int j=0; j<cols; j++) {
+				displayPanel.add(board.getCell(i, j));
+			}
+		displayPanel.setLayout(new GridLayout(rows,cols));
+		displayPanel.setPreferredSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		displayPanel.setMinimumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		displayPanel.setMaximumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		displayPanel.setVisible(true);
+	}
+
+	private void buildLoadFileChooser() { // aby nazwy byly jak najbardziej spojne dodaje Load bo wszedzie go uzywamy i poprawia przejrzystosc
+		if (chooseFileToLoadFC == null)
+			chooseFileToLoadFC = new JFileChooser(new File(System.getProperty("user.dir")));
+		int result = chooseFileToLoadFC.showOpenDialog(mainWindow);
+		if(result == JFileChooser.APPROVE_OPTION) {		//musiałem przenieść do wewnątrz bo inaczej cancel czyścił planszę
+			loadFromFileObject.setUsersCatalogPath(chooseFileToLoadFC.getSelectedFile().getAbsolutePath());
+			initBoard();
+			buildDisplayPanel();
+			mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			mainWindow.setVisible(true);
+		}
+	}
+	
+	private void buildSaveFileChooser() {
+		if (chooseFileToSaveFC == null) {
+			chooseFileToSaveFC = new JFileChooser(new File(System.getProperty("user.dir")));
+			chooseFileToSaveFC.setSelectedFile(new File("example.wire"));
+		}
+		int result = chooseFileToSaveFC.showSaveDialog(mainWindow);
+		if(result == JFileChooser.APPROVE_OPTION) {		//musiałem przenieść do wewnątrz bo inaczej cancel czyścił planszę
+			saveToFileObject.saveBoardToFile(chooseFileToSaveFC.getSelectedFile().getAbsolutePath());
+		}
 	}
 	
 	private void styleButtons() {
@@ -371,29 +367,18 @@ public class MainWindow {
 		saveToFileObject = new SaveBoardToFile(board, chosenGame);
 		saveToFileObject.setChosenGame(chosenGame);
 	}
-
-	private void buildDisplayPanel() { 
-		displayPanel.removeAll();
-		displayPanel.setSize(mainWindow.getWidth() - 15, mainWindow.getHeight() - controlPanelHeight - 15);
-		
-		cellSideSize = (displayPanel.getSize().height)/rows*9/10;	
-		if (displayPanel.getSize().width/cols < cellSideSize)
-			cellSideSize = displayPanel.getSize().width/cols;		//na wypadek gdyby plansza nie miescila sie w poziomie
-		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
-		for(int i=0; i<rows; i++)
-			for(int j=0; j<cols; j++) {
-				displayPanel.add(board.getCell(i, j));
-			}
-		displayPanel.setLayout(new GridLayout(rows,cols));
-		displayPanel.setPreferredSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
-		displayPanel.setMinimumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
-		displayPanel.setMaximumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
-		displayPanel.setVisible(true);
+	
+	private void initIcons() {
+		homeIcon = new ImageIcon("src\\icons\\home_icon.png");
+		startIcon = new ImageIcon("src\\icons\\start_icon.png");
+		pauseIcon = new ImageIcon("src\\icons\\pause_icon.png");
+		structsIcon = new ImageIcon("src\\icons\\structs_icon.png");
 	}
 	
 	public int getCurrentSpeedLabel() {
 		return Integer.parseInt(currentSpeedLabel.getText());
 	}
+	
 	public void setCurrentSpeedLabel(int currentSpeed) {
 		currentSpeedLabel.setText(String.valueOf(currentSpeed));
 	}

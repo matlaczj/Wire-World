@@ -87,8 +87,6 @@ public class LoadBoardFromFile {
 		s.close();
 	}
 	
-	
-	
 	public String getUsersCatalogPath() {
 		return usersCatalogPath;
 	}
