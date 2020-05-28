@@ -1,0 +1,14 @@
+rows: 3
+columns: 8
+
+00000010
+11000000
+01000111
+
+legend to numbers:
+	universal:
+		OFF = 0
+		ON = 1
+	for WW only:
+		HEAD = 2
+		TAIL = 3

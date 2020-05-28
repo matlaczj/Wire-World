@@ -1,0 +1,18 @@
+rows: 7
+columns: 7
+
+1100000
+0010000
+0111100
+0100111
+0111100
+0010000
+1100000
+
+legend to numbers:
+	universal:
+		OFF = 0
+		ON = 1
+	for WW only:
+		HEAD = 2
+		TAIL = 3

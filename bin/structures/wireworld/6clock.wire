@@ -1,0 +1,15 @@
+rows: 3
+columns: 6
+
+011000
+100111
+011000
++electron,1,0
+
+legend to numbers:
+	universal:
+		OFF = 0
+		ON = 1
+	for WW only:
+		HEAD = 2
+		TAIL = 3

@@ -1,0 +1,13 @@
+rows: 2
+columns: 4
+
+0111
+1110
+
+legend to numbers:
+	universal:
+		OFF = 0
+		ON = 1
+	for WW only:
+		HEAD = 2
+		TAIL = 3
