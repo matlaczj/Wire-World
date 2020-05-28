@@ -1,3 +1,4 @@
+package com.example.universalautomaton;
 
 public class BoardThread extends Thread {
 	private boolean isUpdating;
