@@ -11,7 +11,6 @@ public class Board {
 	private LoadBoardFromFile fileLoader;
 	private File file;
 	
-	
 	public Board(int rows, int cols, byte chosenGame) {
 		this.rows = rows;
 		this.cols = cols;
@@ -55,49 +54,72 @@ public class Board {
 			}
 	}
 	
-	public void updateBoardOrCalculateNextState(boolean isUpdating) {
-		int availableThreads = Runtime.getRuntime().availableProcessors();
-			if(rows-2 < availableThreads)
-			{
-				int previousStartingRow = 1;
-				for(int i=0; i<rows-2; i++)
-				{
-					new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow+1).run();
-					previousStartingRow += 1;
-				}
-			}
-			else if(rows-2 > availableThreads) 
-			{
-				int previousStartingRow = 1;
-				if((rows-2) % availableThreads != 0)
-				{
-					for(int i=0; i<availableThreads-1; i++)
-					{
-						new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow + (rows-2)/availableThreads).run();
-						previousStartingRow += (rows-2)/availableThreads;
-					}
-					new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow + 1 + (rows-2)/availableThreads).run();
-				}
-				else if((rows-2) % availableThreads == 0)
-				{
-					for(int i=0; i<availableThreads; i++)
-					{
-						new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow + (rows-2)/availableThreads).run();
-						previousStartingRow += (rows-2)/availableThreads;
-					}
-				}
-			}
-			else if(rows-2 == availableThreads)
-			{
-				int previousStartingRow = 1;
-				for(int i=0; i<availableThreads; i++)
-				{
-					new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow+1).run();
-					previousStartingRow += 1;
-				}
-			}
-		}
+	public void updateBoard() {
+		for(int i=1; i<rows-1; i++)
+			for(int j=1; j<cols-1; j++)
+				board[i][j].updateState();
+	}
 	
+	public void calculateNextStateGOL() {
+		for(int i=1; i<rows-1; i++)
+			for(int j=1; j<cols-1; j++)
+			{
+				int friendsWithStateON = countFriendsWithState(i, j, C.ON);
+				byte cellState = board[i][j].getState();
+				
+				if(cellState == C.OFF && friendsWithStateON == 3)
+					board[i][j].setNextState(C.ON);
+				else if(cellState == C.ON && friendsWithStateON != 2 && friendsWithStateON != 3)
+					board[i][j].setNextState(C.OFF);
+				else if(cellState == C.ON && (friendsWithStateON == 2 || friendsWithStateON == 3))
+					board[i][j].setNextState(C.ON);
+				else
+					board[i][j].setNextState(C.OFF); //przydatne zabezpieczenie przeciw komorkom WW ktore sa teraz traktowane jak wylaczone
+			}
+	}
+	
+	public void calculateNextStateWW() {
+		for(int i=1; i<rows-1; i++)
+			for(int j=1; j<cols-1; j++)
+			{
+				int friendsWithStateHEAD = countFriendsWithState(i, j, C.HEAD);
+				byte cellState = board[i][j].getState();
+				
+				if(cellState == C.OFF)
+					board[i][j].setNextState(C.OFF);
+				else if(cellState == C.HEAD)
+					board[i][j].setNextState(C.TAIL);
+				else if(cellState == C.TAIL)
+					board[i][j].setNextState(C.ON);
+				else if(friendsWithStateHEAD == 1 || friendsWithStateHEAD == 2)
+					board[i][j].setNextState(C.HEAD);
+				else {
+					board[i][j].setNextState(C.ON);
+				}
+			}
+	}
+	
+	private int countFriendsWithState(int i, int j, byte friendState) {
+		int count = 0;
+		if(board[i][j-1].getState()==friendState)
+			count++;
+		if(board[i][j+1].getState()==friendState)
+			count++;
+		if(board[i-1][j].getState()==friendState)
+			count++;
+		if(board[i+1][j].getState()==friendState)
+			count++;
+		if(board[i-1][j-1].getState()==friendState)
+			count++;
+		if(board[i-1][j+1].getState()==friendState)
+			count++;
+		if(board[i+1][j-1].getState()==friendState)
+			count++;
+		if(board[i+1][j+1].getState()==friendState)
+			count++;
+		return count;
+	}
+
 	public void addStruct(String name, int x, int y) throws FileNotFoundException {
 		addStruct(name, x, y, "RIGHT");
 	}
@@ -111,9 +133,6 @@ public class Board {
 			file = new File("src\\structures\\gameoflife\\" + name + ".life");
 		fileLoader.loadStructFromFile(this, file, x, y, dir);
 	}
-
-	public void setChosenGame(byte chosenGame) {
-		this.chosenGame = chosenGame;
-	}
+	
 	
 }
