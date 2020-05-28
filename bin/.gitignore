@@ -1,3 +1,9 @@
 *.class
 *.life
 *.wire
+/.classpath
+/.gitignore
+/.project
+/icons/
+/output_files/
+/structures/

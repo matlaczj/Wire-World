@@ -10,8 +10,8 @@ public class MainWindow {
 	private int cols;
 	private int cellSideSize;
 	private byte chosenGame;
-	private int n;	//liczba generacji
-	private boolean isInfinite = true; //czy ma isc w nieskonczonosc
+	private int numOfGens;	//liczba generacji nazwa n jest tragiczna ... zwlaszcza dla tak waznej zmiennej
+	private boolean isNumOfGensFinite = true; //czy ma isc w nieskonczonosc, dobre nazewnictwo zgodne z przyjetymi wczesniej zasadami
 	private SaveBoardToFile saveToFileObject;
 	private LoadBoardFromFile loadFromFileObject;
 	
@@ -49,8 +49,8 @@ public class MainWindow {
 	private Icon startIcon;
 	private Icon structsIcon;
 	
-	private JButton choiceWW;
-	private JButton choiceGoL;
+	private JButton choiceWWBtn; // konwencja jest przydatna wiec dodaje Btn ma koncu
+	private JButton choiceGoLBtn;
 	
 	private Dimension screenSize;
 	private int controlPanelHeight;
@@ -84,9 +84,9 @@ public class MainWindow {
 		mainWindow.getContentPane().repaint();
 		mainWindow.setLayout(new BorderLayout());
 		
-		choiceWW = new JButton("WireWorld");
-		choiceGoL = new JButton("Game of Life");
-		choiceWW.addActionListener(new ActionListener() {
+		choiceWWBtn = new JButton("WireWorld");
+		choiceGoLBtn = new JButton("Game of Life");
+		choiceWWBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -95,7 +95,7 @@ public class MainWindow {
 			}
 			
 		});
-		choiceGoL.addActionListener(new ActionListener() {
+		choiceGoLBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -104,10 +104,10 @@ public class MainWindow {
 			}
 			
 		});
-		choiceWW.setPreferredSize(new Dimension(mainWindow.getWidth()/2, mainWindow.getHeight()));
-		choiceGoL.setPreferredSize(new Dimension(mainWindow.getWidth()/2, mainWindow.getHeight()));
-		mainWindow.add(choiceWW, BorderLayout.WEST);
-		mainWindow.add(choiceGoL, BorderLayout.EAST);
+		choiceWWBtn.setPreferredSize(new Dimension(mainWindow.getWidth()/2, mainWindow.getHeight()));
+		choiceGoLBtn.setPreferredSize(new Dimension(mainWindow.getWidth()/2, mainWindow.getHeight()));
+		mainWindow.add(choiceWWBtn, BorderLayout.WEST);
+		mainWindow.add(choiceGoLBtn, BorderLayout.EAST);
 		
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.setVisible(true); 
@@ -192,13 +192,13 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if ( numOfGensTA.getText() == "" )
-					isInfinite = true;
+					isNumOfGensFinite = true;
 				else
 					try {
-					n = Integer.parseInt(numOfGensTA.getText());
-					isInfinite = false;
+					numOfGens = Integer.parseInt(numOfGensTA.getText());
+					isNumOfGensFinite = false;
 					} catch (NumberFormatException e1) {
-						isInfinite = true;
+						isNumOfGensFinite = true;
 					}
 				animationTimer.start();
 			}
@@ -265,13 +265,13 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if ( numOfGensTA.getText() == "" )
-					isInfinite = true;
+					isNumOfGensFinite = true;
 				else
 					try {
-					n = Integer.parseInt(numOfGensTA.getText());
-					isInfinite = false;
+					numOfGens = Integer.parseInt(numOfGensTA.getText());
+					isNumOfGensFinite = false;
 					} catch (NumberFormatException e1) {
-						isInfinite = true;
+						isNumOfGensFinite = true;
 					}
 			}
 			
@@ -345,15 +345,15 @@ public class MainWindow {
 		animationTimer = new Timer(1000/getCurrentSpeedLabel() , new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (isInfinite || n>0 ) {
+				if (isNumOfGensFinite || numOfGens>0 ) {
 					if (chosenGame == C.GOL)
 						board.calculateNextStateGOL();
 					else if (chosenGame == C.WW)
 						board.calculateNextStateWW();
 					board.updateBoard();
-					if (!isInfinite) {
-						n--;
-						numOfGensTA.setText(Integer.toString(n));
+					if (!isNumOfGensFinite) {
+						numOfGens--;
+						numOfGensTA.setText(Integer.toString(numOfGens));
 					}
 //					saveToFileObject.saveBoardToFile(); //obecnie zapisuje kazdy nowy stan
 				}
