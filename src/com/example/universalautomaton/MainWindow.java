@@ -360,7 +360,7 @@ public class MainWindow {
 	}
 	
 	private void initBoard() {
-		board = loadFromFileObject.loadBoardFromFile("notafile.wire"); 
+		board = loadFromFileObject.loadBoardFromFile("testfile.wire"); 
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2, chosenGame); // +2 dla paddingu
 		rows = board.getRows(); 
