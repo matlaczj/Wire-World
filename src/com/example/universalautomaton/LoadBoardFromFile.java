@@ -15,6 +15,10 @@ public class LoadBoardFromFile {
 	}
 	
 	public Board loadBoardFromFile(String fileName) {
+		return loadBoardFromFile(fileName, Directions.R);
+	}
+	
+	public Board loadBoardFromFile(String fileName, byte dir) {
 		try {
 			File file;
 			if(!usersCatalogPath.equals("")) {
@@ -28,13 +32,21 @@ public class LoadBoardFromFile {
 				return null; //jesli wybierzemy nieprawidlowy plik dla wybranego typu gry
 			
 			Scanner s = new Scanner(file); //uniwersalna sciezka, dzialajaca
+			int rows, cols;
 			s.next();
-			int rows = s.nextInt()+2; //+2 dla paddingu
-			s.next();
-			int cols = s.nextInt()+2;
+				if(dir%2 == 0) {
+					rows = s.nextInt()+2; //+2 dla paddingu
+					s.next();
+					cols = s.nextInt()+2;
+				}
+				else{
+					cols = s.nextInt()+2; //+2 dla paddingu
+					s.next();
+					rows = s.nextInt()+2;
+				}
 			Board board = new Board(rows, cols, chosenGame);
 			s.close();
-			loadFileIntoBoard(board, file);
+			loadFileIntoBoard(board, file, 0, 0, dir);
 			return board;
 		}
 		catch(FileNotFoundException ex) {
@@ -45,10 +57,6 @@ public class LoadBoardFromFile {
 	
 	public void loadStructFromFile(Board board, File file, int x, int y, byte dir) throws FileNotFoundException {
 		loadFileIntoBoard(board, file, x, y, dir);
-	}
-	
-	private void loadFileIntoBoard (Board board, File file) throws FileNotFoundException {
-		loadFileIntoBoard(board, file, 0, 0, Directions.R);
 	}
 	
 	private void loadFileIntoBoard (Board board, File file, int x, int y, byte dir) throws FileNotFoundException {	
@@ -175,7 +183,7 @@ public class LoadBoardFromFile {
 			for(int i=1; i<1+fileRows; i++)
 			{
 				buffer = s.nextLine().trim();
-				if (fileCols-i+1+x >= cols-1 || fileCols-i+1+x < 1)
+				if (fileRows-i+1+x >= cols-1 || fileRows-i+1+x < 1)
 					continue;
 				for(int j=jstart; j<1+fileCols && j+y<rows-1; j++)
 				{

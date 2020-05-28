@@ -19,7 +19,7 @@ public class MainWindow {
 	private SaveBoardToFile saveToFileObject;
 	private LoadBoardFromFile loadFromFileObject;
 	
-	private JFrame mainWindow;
+	JFrame mainWindow;
 	private JPanel controlPanel;
 	private JPanel displayPanel;
 	private StructPanel[] structPanels;
@@ -444,7 +444,7 @@ public class MainWindow {
         }
     }
 
-	public void startStructListener(String filename, int i, int j) {
+	public void startStructListener(String filename, int i, int j, byte dir) {
 		board.setActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -453,7 +453,7 @@ public class MainWindow {
 				int y = Integer.parseInt(position[0]);
 				int x = Integer.parseInt(position[1]);
 				try {
-					loadFromFileObject.loadStructFromFile(board, file, x - j, y - i, Directions.R);
+					loadFromFileObject.loadStructFromFile(board, file, x - j, y - i, dir);
 					board.restoreListeners();
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();

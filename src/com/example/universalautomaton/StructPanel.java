@@ -17,6 +17,7 @@ public class StructPanel extends JPanel {
 	private String filename;
 	private LoadBoardFromFile loadFromFileObject = new LoadBoardFromFile(C.WW);
 	private int rows, cols, count;
+	private byte dir = Directions.R;
 	
 	public StructPanel(String filename, int count, MainWindow mainWindow) {
 		super();
@@ -26,12 +27,11 @@ public class StructPanel extends JPanel {
 		this.count /= 6;
 		parent = mainWindow;
 		parseName(filename);
+		nameLabel = new JLabel(name);
 		loadFromFileObject.setUsersCatalogPath(filename);
-		board = loadFromFileObject.loadBoardFromFile("");
-		rows = board.getRows();
-		cols = board.getCols();
-		setupButtons();
+		displayPanel = new JPanel();
 		setupDisplayPanel();
+		setupButtons();
 		setupLayout();
 	}	
 
@@ -46,7 +46,15 @@ public class StructPanel extends JPanel {
 		rotateBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				int mir = dir/4;
+				dir++;
+				dir = (byte) (mir*4 + dir%4);
+				loadFromFileObject.setUsersCatalogPath(filename);
+				setupDisplayPanel();
+				setupLayout();
+				setVisible(true);
+				parent.mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				parent.mainWindow.setVisible(true);
 			}
 		});
 		mirrorBtn = new JButton ("mirror");
@@ -56,25 +64,17 @@ public class StructPanel extends JPanel {
 				// TODO Auto-generated method stub
 			}
 		});
-		board.setActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String[] position = e.getActionCommand().split(" ");
-				int i = Integer.parseInt(position[0]);
-				int j = Integer.parseInt(position[1]);
-				parent.startStructListener(filename, i, j);
-			}
-		});
 	}
 	
 	private void setupLayout() {
+		removeAll();
+		repaint();
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(1,1,1,1);
 		c.gridx = 0;
 		c.gridy = 0;
-		nameLabel = new JLabel(name);
 		add(nameLabel, c);
 		c.gridx = 1;
 		add(rotateBtn, c);
@@ -90,7 +90,20 @@ public class StructPanel extends JPanel {
 	}
 	
 	private void setupDisplayPanel() {
-		displayPanel = new JPanel();
+		board = loadFromFileObject.loadBoardFromFile("", dir);
+		board.setActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String[] position = e.getActionCommand().split(" ");
+				int i = Integer.parseInt(position[0]);
+				int j = Integer.parseInt(position[1]);
+				parent.startStructListener(filename, i, j, dir);
+			}
+		});
+		rows = board.getRows();
+		cols = board.getCols();
+		displayPanel.removeAll();
+		displayPanel.setSize(Toolkit.getDefaultToolkit().getScreenSize().width/7, Toolkit.getDefaultToolkit().getScreenSize().height/count*4/5);
 		int cellSideSize = Toolkit.getDefaultToolkit().getScreenSize().width/7/cols;
 		if (cellSideSize > Toolkit.getDefaultToolkit().getScreenSize().height/count*4/5/rows)
 			cellSideSize = Toolkit.getDefaultToolkit().getScreenSize().height/count*4/5/rows;
