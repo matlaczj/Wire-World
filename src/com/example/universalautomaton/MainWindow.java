@@ -2,6 +2,8 @@ package com.example.universalautomaton;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -18,7 +20,8 @@ public class MainWindow {
 	
 	private JFrame mainWindow;
 	private JPanel controlPanel;
-	private JPanel displayPanel; 
+	private JPanel displayPanel;
+	private StructPanel[] structPanels;
 	private Board board;
 	
 	private JButton goHomeBtn;
@@ -240,6 +243,12 @@ public class MainWindow {
 					}
 			}
 		});
+		structsBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				buildStructsWindow();
+			}
+		});
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets = new Insets(0,1,0,1);
@@ -383,5 +392,50 @@ public class MainWindow {
 	public void setCurrentSpeedLabel(int currentSpeed) {
 		currentSpeedLabel.setText(String.valueOf(currentSpeed));
 	}
+	
+	private void buildStructsWindow() {
+		mainWindow.getContentPane().removeAll();
+		mainWindow.getContentPane().repaint();
+		mainWindow.setLayout(new GridLayout(0,6));
+		File folder;
+		List<String> filenames = new ArrayList<>();
+		if (chosenGame == C.WW) {
+			folder = new File("src\\structures\\wireworld");
+			search(".*\\.wire", folder, filenames);
+		}
+		else if (chosenGame == C.GOL) {
+			folder = new File("src\\structures\\gameoflife");
+			search(".*\\.life", folder, filenames);
+		}
+        structPanels = new StructPanel[filenames.size()];
+        int i = 0;
+        for (String name : filenames) {
+        	mainWindow.add(structPanels[i++] = new StructPanel(name));
+        }
+        JButton backBtn = new JButton("Back");
+        backBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setupWindow();
+			}
+        });
+        mainWindow.add(backBtn);
+        mainWindow.setVisible(true);
+	}
+	
+	public static void search(final String pattern, final File folder, List<String> result) {
+        for (final File f : folder.listFiles()) {
 
+            if (f.isDirectory()) {
+                search(pattern, f, result);
+            }
+
+            if (f.isFile()) {
+                if (f.getName().matches(pattern)) {
+                    result.add(f.getAbsolutePath());
+                }
+            }
+
+        }
+    }
 }
