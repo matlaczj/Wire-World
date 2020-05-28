@@ -16,7 +16,7 @@ columns: 15
 000000000000000
 000000000000000
 000000000000000
-+AND-NOT,10,9,UPR
++AND-NOT,0,0,LEFT
 
 legend to numbers:
 	universal:

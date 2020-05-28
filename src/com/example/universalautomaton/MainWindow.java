@@ -369,7 +369,7 @@ public class MainWindow {
 	}
 	
 	private void initBoard() {
-		board = loadFromFileObject.loadBoardFromFile("testfile.wire"); 
+		board = loadFromFileObject.loadBoardFromFile("notafile.wire"); 
 		if(board == null)
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2, chosenGame); // +2 dla paddingu
 		rows = board.getRows(); 
@@ -410,13 +410,17 @@ public class MainWindow {
         structPanels = new StructPanel[filenames.size()];
         int i = 0;
         for (String name : filenames) {
-        	mainWindow.add(structPanels[i++] = new StructPanel(name));
+        	mainWindow.add(structPanels[i++] = new StructPanel(name, filenames.size()));
         }
         JButton backBtn = new JButton("Back");
         backBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setupWindow();
+				buildMainWindow();
+				buildControlPanel();
+				buildDisplayPanel();
+				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				mainWindow.setVisible(true);
 			}
         });
         mainWindow.add(backBtn);

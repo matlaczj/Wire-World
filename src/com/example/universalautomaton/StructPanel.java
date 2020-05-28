@@ -1,7 +1,7 @@
 package com.example.universalautomaton;
 
-import java.io.File;
-import java.util.regex.Matcher;
+import java.awt.*;
+import java.awt.event.*;
 
 import javax.swing.*;
 
@@ -15,16 +15,22 @@ public class StructPanel extends JPanel {
 	private String name;
 	private String filename;
 	private LoadBoardFromFile loadFromFileObject = new LoadBoardFromFile(C.WW);
+	private int rows, cols, count;
 	
-	public StructPanel(String filename) {
+	public StructPanel(String filename, int count) {
 		super();
 		this.filename = filename;
+		this.count = count;
+		this.count += 6;
+		this.count /= 6;
 		parseName(filename);
 		loadFromFileObject.setUsersCatalogPath(filename);
 		board = loadFromFileObject.loadBoardFromFile("");
+		rows = board.getRows();
+		cols = board.getCols();
 		setupButtons();
-		setupLayout();
 		setupDisplayPanel();
+		setupLayout();
 	}	
 
 	private void parseName(String filename) {
@@ -34,18 +40,64 @@ public class StructPanel extends JPanel {
 	}
 	
 	private void setupButtons() {
-		// TODO Auto-generated method stub
-		
+		rotateBtn = new JButton ("rotate");
+		rotateBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
+		mirrorBtn = new JButton ("mirror");
+		mirrorBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
+		board.setActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
 	}
 	
 	private void setupLayout() {
-		// TODO Auto-generated method stub
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(1,1,1,1);
+		c.gridx = 0;
+		c.gridy = 0;
 		nameLabel = new JLabel(name);
-		add(nameLabel);
+		add(nameLabel, c);
+		c.gridx = 1;
+		add(rotateBtn, c);
+		c.gridx = 2;
+		add(mirrorBtn, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 3;
+		c.gridheight = 4;
+		c.fill = GridBagConstraints.VERTICAL;
+		c.insets = new Insets(5,5,5,5);
+		add(displayPanel, c);
 	}
 	
 	private void setupDisplayPanel() {
-		// TODO Auto-generated method stub
-		
+		displayPanel = new JPanel();
+		int cellSideSize = Toolkit.getDefaultToolkit().getScreenSize().width/7/cols;
+		if (cellSideSize > Toolkit.getDefaultToolkit().getScreenSize().height/count*4/5/rows)
+			cellSideSize = Toolkit.getDefaultToolkit().getScreenSize().height/count*4/5/rows;
+		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
+		for(int i=0; i<rows; i++)
+			for(int j=0; j<cols; j++) {
+				displayPanel.add(board.getCell(i, j));
+			}
+		displayPanel.setLayout(new GridLayout(rows,cols));
+		displayPanel.setPreferredSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		displayPanel.setMinimumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		displayPanel.setMaximumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		displayPanel.setVisible(true);
 	}
 }

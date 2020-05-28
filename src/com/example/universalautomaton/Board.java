@@ -1,5 +1,6 @@
 package com.example.universalautomaton;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -10,6 +11,9 @@ public class Board {
 	private byte chosenGame;
 	private LoadBoardFromFile fileLoader;
 	private File file;
+	private BoardClickListener bcl;
+	private BoardDragListener bdl;
+	private ActionListener tmpl;
 	
 	public Board(int rows, int cols, byte chosenGame) {
 		this.rows = rows;
@@ -29,8 +33,8 @@ public class Board {
 	}
 	
 	private void initializeBoard() {
-		BoardClickListener bcl = new BoardClickListener(chosenGame); //wspolny dla wszystkich z oszczednosci pamieci
-		BoardDragListener bdl = new BoardDragListener(chosenGame);
+		bcl = new BoardClickListener(chosenGame); //wspolny dla wszystkich z oszczednosci pamieci
+		bdl = new BoardDragListener(chosenGame);
 		board = new Cell [rows][cols];
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
@@ -113,5 +117,28 @@ public class Board {
 	
 	public void setChosenGame(byte chosenGame) {
 		this.chosenGame = chosenGame;
+	}
+	
+	public void setActionListener(ActionListener l) {
+		for(int i=0; i<rows; i++)
+			for(int j=0; j<cols; j++)
+			{
+				board[i][j].removeActionListener(bcl);
+				board[i][j].removeMouseListener(bdl);
+				board[i][j].addActionListener(l);
+			}
+		tmpl = l;
+	}
+	
+	public void restoreListeners() {
+		for(int i=0; i<rows; i++)
+			for(int j=0; j<cols; j++)
+			{
+				board[i][j].removeActionListener(tmpl);
+				if(i==0 || j==0 || i==rows-1 || j==cols-1)
+					continue;
+				board[i][j].addActionListener(bcl);		
+				board[i][j].addMouseListener(bdl);
+			}
 	}
 }
