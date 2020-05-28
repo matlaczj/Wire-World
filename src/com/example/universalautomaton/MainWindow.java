@@ -2,6 +2,7 @@ package com.example.universalautomaton;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -410,7 +411,7 @@ public class MainWindow {
         structPanels = new StructPanel[filenames.size()];
         int i = 0;
         for (String name : filenames) {
-        	mainWindow.add(structPanels[i++] = new StructPanel(name, filenames.size()));
+        	mainWindow.add(structPanels[i++] = new StructPanel(name, filenames.size(), this));
         }
         JButton backBtn = new JButton("Back");
         backBtn.addActionListener(new ActionListener() {
@@ -442,4 +443,27 @@ public class MainWindow {
 
         }
     }
+
+	public void startStructListener(String filename, int i, int j) {
+		board.setActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				File file = new File(filename);
+				String[] position = e.getActionCommand().split(" ");
+				int y = Integer.parseInt(position[0]);
+				int x = Integer.parseInt(position[1]);
+				try {
+					loadFromFileObject.loadStructFromFile(board, file, x - j, y - i, Directions.R);
+					board.restoreListeners();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		buildMainWindow();
+		buildControlPanel();
+		buildDisplayPanel();
+		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainWindow.setVisible(true);
+	}
 }

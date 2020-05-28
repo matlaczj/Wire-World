@@ -126,6 +126,7 @@ public class Board {
 				board[i][j].removeActionListener(bcl);
 				board[i][j].removeMouseListener(bdl);
 				board[i][j].addActionListener(l);
+				board[i][j].setActionCommand(i + " " + j);
 			}
 		tmpl = l;
 	}

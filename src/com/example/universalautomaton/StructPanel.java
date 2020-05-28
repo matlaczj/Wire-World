@@ -7,6 +7,7 @@ import javax.swing.*;
 
 public class StructPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private MainWindow parent;
 	private JLabel nameLabel;
 	private JButton rotateBtn;
 	private JButton mirrorBtn;
@@ -17,12 +18,13 @@ public class StructPanel extends JPanel {
 	private LoadBoardFromFile loadFromFileObject = new LoadBoardFromFile(C.WW);
 	private int rows, cols, count;
 	
-	public StructPanel(String filename, int count) {
+	public StructPanel(String filename, int count, MainWindow mainWindow) {
 		super();
 		this.filename = filename;
 		this.count = count;
 		this.count += 6;
 		this.count /= 6;
+		parent = mainWindow;
 		parseName(filename);
 		loadFromFileObject.setUsersCatalogPath(filename);
 		board = loadFromFileObject.loadBoardFromFile("");
@@ -57,7 +59,10 @@ public class StructPanel extends JPanel {
 		board.setActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				String[] position = e.getActionCommand().split(" ");
+				int i = Integer.parseInt(position[0]);
+				int j = Integer.parseInt(position[1]);
+				parent.startStructListener(filename, i, j);
 			}
 		});
 	}

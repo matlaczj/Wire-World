@@ -83,19 +83,21 @@ public class LoadBoardFromFile {
 		this.usersCatalogPath = usersCatalogPath;
 	}
 	
-	public void loadBlockIntoBoard(Board board, Scanner s, int x, int y, byte dir) {
+	private void loadBlockIntoBoard(Board board, Scanner s, int x, int y, byte dir) {
 		int rows = board.getRows();
 		int cols = board.getCols();	
-		int jstart;
+		int jstart = 1;
 		switch (dir) {
 		
 		case Directions.R:
+			if (x < 0)
+				jstart -= x;
 			for(int i=1; i<1+fileRows; i++)
 			{
 				buffer = s.nextLine().trim();
-				if (i+y >= rows-1)
+				if (i+y >= rows-1 || i+y < 1)
 					continue;
-				for(int j=1; j<1+fileCols && j+x<cols-1; j++)
+				for(int j=jstart; j<1+fileCols && j+x<cols-1; j++)
 				{
 					if(buffer.charAt(j-1)-'0' == (int)C.ON)
 						board.getCell(i+y, j+x).setState(C.ON);
@@ -108,12 +110,14 @@ public class LoadBoardFromFile {
 			break;
 			
 		case Directions.RR:		//odbicie wzgl osi X
+			if (x < 0)
+				jstart -= x;
 			for(int i = 1; i<1+fileRows; i++)
 			{
 				buffer = s.nextLine().trim();
-				if (fileRows-i+1+y >= rows-1)
+				if (fileRows-i+1+y >= rows-1 || fileRows-i+1+y < 1)
 					continue;
-				for(int j=1; j<1+fileCols && j+x<cols-1; j++)
+				for(int j=jstart; j<1+fileCols && j+x<cols-1; j++)
 				{
 					if(buffer.charAt(j-1)-'0' == (int)C.ON)
 						board.getCell(fileRows-i+1+y, j+x).setState(C.ON);
@@ -126,13 +130,12 @@ public class LoadBoardFromFile {
 			break;
 			
 		case Directions.L:		//obrot o 180 == 2 odbicia, wzgl X i wzgl Y
-			jstart = 1;
 			if (fileCols + x > cols - 2)
 				jstart += fileCols + x - cols + 2;
 			for(int i=1; i<1+fileRows; i++)
 			{
 				buffer = s.nextLine().trim();
-				if (fileRows-i+1+y >= rows-1)
+				if (fileRows-i+1+y >= rows-1 || fileRows-i+1+y < 1)
 					continue;
 				for(int j=jstart; j<1+fileCols; j++)
 				{
@@ -147,13 +150,12 @@ public class LoadBoardFromFile {
 			break;
 			
 		case Directions.LR:		//odbicie wzgl osi Y
-			jstart = 1;
 			if (fileCols + x > cols - 2)
 				jstart += fileCols + x - cols + 2;
 			for(int i=1; i<1+fileRows; i++)
 			{
 				buffer = s.nextLine().trim();
-				if (i+y >= rows-1)
+				if (i+y >= rows-1 || i+y < 1)
 					continue;
 				for(int j=jstart; j<1+fileCols; j++)
 				{
@@ -168,12 +170,14 @@ public class LoadBoardFromFile {
 			break;
 			
 		case Directions.D:		//obrot o 90 zgodnie ze wsk zegara
+			if (y < 0)
+				jstart -= y;
 			for(int i=1; i<1+fileRows; i++)
 			{
 				buffer = s.nextLine().trim();
-				if (fileCols-i+1+x >= cols-1)
+				if (fileCols-i+1+x >= cols-1 || fileCols-i+1+x < 1)
 					continue;
-				for(int j=1; j<1+fileCols && j+y<rows-1; j++)
+				for(int j=jstart; j<1+fileCols && j+y<rows-1; j++)
 				{
 					if(buffer.charAt(j-1)-'0' == (int)C.ON)
 						board.getCell(j+y, fileRows-i+1+x).setState(C.ON);
@@ -186,12 +190,14 @@ public class LoadBoardFromFile {
 			break;
 			
 		case Directions.DR:		//odbicie wzgl osi y = -x
+			if (y < 0)
+				jstart -= y;
 			for(int i=1; i<1+fileRows; i++)
 			{
 				buffer = s.nextLine().trim();
-				if (i+x >= cols-1)
+				if (i+x >= cols-1 || i+x < 1)
 					continue;
-				for(int j=1; j<1+fileCols && j+y<rows-1; j++)
+				for(int j=jstart; j<1+fileCols && j+y<rows-1; j++)
 				{
 					if(buffer.charAt(j-1)-'0' == (int)C.ON)
 						board.getCell(j+y, i+x).setState(C.ON);
@@ -204,13 +210,12 @@ public class LoadBoardFromFile {
 			break;
 			
 		case Directions.U:		//obrot o 90 przeciwnie do wsk zegara
-			jstart = 1;
 			if (fileCols + y > rows - 2)
 				jstart += fileCols + y - rows + 2;
 			for(int i=1; i<1+fileRows; i++)
 			{
 				buffer = s.nextLine().trim();
-				if (i+x >= cols-1)
+				if (i+x >= cols-1 || i+x < 1)
 					continue;
 				for(int j=jstart; j<1+fileCols; j++)
 				{
@@ -225,13 +230,12 @@ public class LoadBoardFromFile {
 			break;
 			
 		case Directions.UR:		//odbicie wzgl osi y=x
-			jstart = 1;
 			if (fileCols + y > rows - 2)
 				jstart += fileCols + y - rows + 2;
 			for(int i=1; i<1+fileRows; i++)
 			{
 				buffer = s.nextLine().trim();
-				if (fileRows-i+1+x >= cols-1)
+				if (fileRows-i+1+x >= cols-1 || fileRows-i+1+x < 1 )
 					continue;
 				for(int j=jstart; j<1+fileCols; j++)
 				{
