@@ -51,7 +51,7 @@ public class StructPanel extends JPanel {
 	}
 	
 	private void setupButtons() {
-		rotateBtn = new JButton ("rotate");
+		rotateBtn = new JButton (parent.rotateIcon);
 		rotateBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -59,6 +59,10 @@ public class StructPanel extends JPanel {
 				dir++;
 				dir = (byte) (mir*4 + dir%4);
 				loadFromFileObject.setUsersCatalogPath(filename);
+				if (mirrorBtn.getIcon() == parent.mirrorXIcon)
+					mirrorBtn.setIcon(parent.mirrorYIcon);
+				else
+					mirrorBtn.setIcon(parent.mirrorXIcon);
 				setupBoard();
 				setupDisplayPanel();
 				setupLayout();
@@ -67,7 +71,7 @@ public class StructPanel extends JPanel {
 				parent.mainWindow.setVisible(true);
 			}
 		});
-		mirrorBtn = new JButton ("mirror");
+		mirrorBtn = new JButton (parent.mirrorXIcon);
 		mirrorBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -95,9 +99,12 @@ public class StructPanel extends JPanel {
 		c.gridy = 0;
 		add(nameLabel, c);
 		c.gridx = 1;
+		c.weightx = 0.5;
 		add(rotateBtn, c);
 		c.gridx = 2;
+		c.weightx = 0.5;
 		add(mirrorBtn, c);
+		c.weightx = 0;
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 3;

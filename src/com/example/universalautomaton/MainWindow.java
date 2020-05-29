@@ -56,6 +56,10 @@ public class MainWindow {
 	private Icon pauseIcon;
 	private Icon startIcon;
 	private Icon structsIcon;
+	private Icon saveIcon;
+	Icon rotateIcon;
+	Icon mirrorXIcon;
+	Icon mirrorYIcon;
 	
 	private Dimension screenSize;
 	private int controlPanelHeight;
@@ -121,6 +125,7 @@ public class MainWindow {
 		initBoard();
 		buildDisplayPanel();
 		loadFromFileObject = new LoadBoardFromFile(chosenGame);
+		mainWindow.addComponentListener(componentAdapter);
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.setVisible(true);
 	}
@@ -136,8 +141,6 @@ public class MainWindow {
 		mainWindow.add(controlPanel);
 		mainWindow.add(displayPanel);
 		mainWindow.add(Box.createRigidArea(new Dimension(0,15)));	//troche luzu pod spodem
-		
-		mainWindow.addComponentListener(componentAdapter);
 	}
 	
 	private void buildControlPanel() {
@@ -145,7 +148,6 @@ public class MainWindow {
 		structsBtn = new JButton(structsIcon);
 		startBtn = new JButton(startIcon);
 		pauseBtn = new JButton(pauseIcon);
-		styleButtons();
 		rowsTA = new JTextField(Integer.toString(rows-2), 1); 
 		columnsTA = new JTextField(Integer.toString(cols-2), 1);
 		numOfGensTA = new JTextField("", 1);
@@ -158,8 +160,9 @@ public class MainWindow {
 		speedSlider = new JSlider(1,20,10);
 		currentSpeedLabel = new JLabel("10");
 		chooseFileToLoadBtn = new JButton("load state");
-		saveBtn = new JButton("save");
+		saveBtn = new JButton(saveIcon);
 		chooseFileToSaveBtn = new JButton("save as...");
+		styleButtons();
 		
 		//to jest tylko po to aby ButtonClickListener mogl obslugiwac te przyciski bez dostepu do nich bezposrednio
 		goHomeBtn.setActionCommand("goHomeBtn");
@@ -359,10 +362,12 @@ public class MainWindow {
 		startBtn.setBackground(bgColor);
 		pauseBtn.setBackground(bgColor);
 		structsBtn.setBackground(bgColor);
+		saveBtn.setBackground(bgColor);
 		goHomeBtn.setBorderPainted(false);
 		startBtn.setBorderPainted(false);
 		pauseBtn.setBorderPainted(false);
 		structsBtn.setBorderPainted(false);
+		saveBtn.setBorderPainted(false);
 	}
 	
 	private void initAnimationTimers() {
@@ -401,6 +406,10 @@ public class MainWindow {
 		startIcon = new ImageIcon("src\\icons\\start_icon.png");
 		pauseIcon = new ImageIcon("src\\icons\\pause_icon.png");
 		structsIcon = new ImageIcon("src\\icons\\structs_icon.png");
+		saveIcon = new ImageIcon("src\\icons\\save_icon.png");
+		rotateIcon = new ImageIcon("src\\icons\\rotate_icon.png");
+		mirrorXIcon = new ImageIcon("src\\icons\\mirrorx_icon.png");
+		mirrorYIcon = new ImageIcon("src\\icons\\mirrory_icon.png");
 	}
 	
 	public int getCurrentSpeedLabel() {
@@ -439,6 +448,7 @@ public class MainWindow {
 				buildMainWindow();
 				buildControlPanel();
 				buildDisplayPanel();
+				mainWindow.addComponentListener(componentAdapter);
 				mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				mainWindow.setVisible(true);
 			}
@@ -482,6 +492,7 @@ public class MainWindow {
 		buildMainWindow();
 		buildControlPanel();
 		buildDisplayPanel();
+		mainWindow.addComponentListener(componentAdapter);
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.setVisible(true);
 	}
