@@ -10,8 +10,8 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 public class MainWindow {
-	private int rows = 12;
-	private int cols = 12;
+	private int rows = 22;
+	private int cols = 22;
 	private int cellSideSize;
 	private byte chosenGame;
 	private int numOfGens;	//liczba generacji nazwa n jest tragiczna ... zwlaszcza dla tak waznej zmiennej
