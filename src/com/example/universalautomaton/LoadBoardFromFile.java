@@ -215,7 +215,7 @@ public class LoadBoardFromFile {
 				buffer = s.nextLine().trim();
 				if (fileRows-i+1+y >= rows-1 || fileRows-i+1+y < 1)
 					continue;
-				for(int j=jstart; j<1+fileCols; j++)
+				for(int j=jstart; j<1+fileCols && fileCols-j+1+x > 0; j++)
 				{
 					if(buffer.charAt(j-1)-'0' == (int)C.ON)
 						board.getCell(fileRows-i+1+y, fileCols-j+1+x).setState(C.ON);
@@ -235,7 +235,7 @@ public class LoadBoardFromFile {
 				buffer = s.nextLine().trim();
 				if (i+y >= rows-1 || i+y < 1)
 					continue;
-				for(int j=jstart; j<1+fileCols; j++)
+				for(int j=jstart; j<1+fileCols && fileCols-j+1+x > 0; j++)
 				{
 					if(buffer.charAt(j-1)-'0' == (int)C.ON)
 						board.getCell(i+y, fileCols-j+1+x).setState(C.ON);
@@ -295,7 +295,7 @@ public class LoadBoardFromFile {
 				buffer = s.nextLine().trim();
 				if (i+x >= cols-1 || i+x < 1)
 					continue;
-				for(int j=jstart; j<1+fileCols; j++)
+				for(int j=jstart; j<1+fileCols && fileCols-j+1+y > 0; j++)
 				{
 					if(buffer.charAt(j-1)-'0' == (int)C.ON)
 						board.getCell(fileCols-j+1+y, i+x).setState(C.ON);
@@ -315,7 +315,7 @@ public class LoadBoardFromFile {
 				buffer = s.nextLine().trim();
 				if (fileRows-i+1+x >= cols-1 || fileRows-i+1+x < 1 )
 					continue;
-				for(int j=jstart; j<1+fileCols; j++)
+				for(int j=jstart; j<1+fileCols && fileCols-j+1+y > 0; j++)
 				{
 					if(buffer.charAt(j-1)-'0' == (int)C.ON)
 						board.getCell(fileCols-j+1+y, fileRows-i+1+x).setState(C.ON);
