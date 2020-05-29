@@ -18,6 +18,13 @@ public class StructPanel extends JPanel {
 	private LoadBoardFromFile loadFromFileObject = new LoadBoardFromFile(C.WW);
 	private int rows, cols, count;
 	private byte dir = Directions.R;
+	private ComponentAdapter componentAdapter = new ComponentAdapter(){  
+        public void componentResized(ComponentEvent evt) {
+        	setupDisplayPanel();
+			parent.mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			parent.mainWindow.setVisible(true);
+        }
+	};
 	
 	public StructPanel(String filename, int count, MainWindow mainWindow) {
 		super();
@@ -30,9 +37,11 @@ public class StructPanel extends JPanel {
 		nameLabel = new JLabel(name);
 		loadFromFileObject.setUsersCatalogPath(filename);
 		displayPanel = new JPanel();
+		setupBoard();
 		setupDisplayPanel();
 		setupButtons();
 		setupLayout();
+		parent.mainWindow.addComponentListener(componentAdapter);
 	}	
 
 	private void parseName(String filename) {
@@ -96,7 +105,7 @@ public class StructPanel extends JPanel {
 		add(displayPanel, c);
 	}
 	
-	private void setupDisplayPanel() {
+	private void setupBoard() {
 		board = loadFromFileObject.loadBoardFromFile("", dir);
 		board.setActionListener(new ActionListener() {
 			@Override
@@ -109,11 +118,14 @@ public class StructPanel extends JPanel {
 		});
 		rows = board.getRows();
 		cols = board.getCols();
+	}
+	
+	private void setupDisplayPanel() {
 		displayPanel.removeAll();
-		displayPanel.setSize(Toolkit.getDefaultToolkit().getScreenSize().width/7, Toolkit.getDefaultToolkit().getScreenSize().height/count*4/5);
-		int cellSideSize = Toolkit.getDefaultToolkit().getScreenSize().width/7/cols;
-		if (cellSideSize > Toolkit.getDefaultToolkit().getScreenSize().height/count*4/5/rows)
-			cellSideSize = Toolkit.getDefaultToolkit().getScreenSize().height/count*4/5/rows;
+		displayPanel.setSize(parent.mainWindow.getSize().width/7, parent.mainWindow.getSize().height/count*4/5);
+		int cellSideSize = parent.mainWindow.getSize().width/7/cols;
+		if (cellSideSize > parent.mainWindow.getSize().height/count*4/5/rows)
+			cellSideSize = parent.mainWindow.getSize().height/count*4/5/rows;
 		board.changeCellsSize(new Dimension(cellSideSize,cellSideSize));
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++) {

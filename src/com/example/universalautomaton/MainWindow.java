@@ -61,16 +61,26 @@ public class MainWindow {
 	private int controlPanelHeight;
 	private Color bgColor = new Color(238,238,238); //kolor domyslnego tla okna aplikacji
 	
+	private ComponentAdapter componentAdapter = new ComponentAdapter(){  
+        public void componentResized(ComponentEvent evt) {
+        	buildDisplayPanel();
+			mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			mainWindow.setVisible(true);
+        }
+	};
 	
 	public MainWindow() {
 		initIcons(); //pozostawiam tutaj gdybysmy chcieli dac ikony na okno wyboru gry, inaczej dalbym na poczatek buildControlPanel
 		mainWindow = new JFrame("Uniwersalny automat komorkowy");
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainWindow.setMaximumSize(screenSize);
+		mainWindow.setSize(screenSize);
 		buildChoiceWindow();
 	}
 	
 	private void buildChoiceWindow() {
+		mainWindow.removeComponentListener(componentAdapter);
+		Dimension oldSize = mainWindow.getSize();
 		mainWindow.setSize(600, 400);
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().repaint();
@@ -82,6 +92,7 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				chosenGame = C.WW;
+				mainWindow.setSize(oldSize);
 				setupWindow();
 			}
 		});
@@ -89,6 +100,7 @@ public class MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				chosenGame = C.GOL;
+				mainWindow.setSize(oldSize);
 				setupWindow();
 			}
 		});
@@ -114,7 +126,6 @@ public class MainWindow {
 	}
 	
 	private void buildMainWindow() {
-		mainWindow.setSize(screenSize);
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().repaint();
 		mainWindow.setLayout(new BoxLayout(mainWindow.getContentPane(), BoxLayout.Y_AXIS));
@@ -125,6 +136,8 @@ public class MainWindow {
 		mainWindow.add(controlPanel);
 		mainWindow.add(displayPanel);
 		mainWindow.add(Box.createRigidArea(new Dimension(0,15)));	//troche luzu pod spodem
+		
+		mainWindow.addComponentListener(componentAdapter);
 	}
 	
 	private void buildControlPanel() {
@@ -400,6 +413,7 @@ public class MainWindow {
 	
 	private void buildStructsWindow() {
 		board.restoreListeners();
+		mainWindow.removeComponentListener(componentAdapter);
 		mainWindow.getContentPane().removeAll();
 		mainWindow.getContentPane().repaint();
 		mainWindow.setLayout(new GridLayout(0,6));
