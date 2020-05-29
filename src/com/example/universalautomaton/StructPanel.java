@@ -59,6 +59,7 @@ public class StructPanel extends JPanel {
 				dir++;
 				dir = (byte) (mir*4 + dir%4);
 				loadFromFileObject.setUsersCatalogPath(filename);
+				setupBoard();
 				setupDisplayPanel();
 				setupLayout();
 				setVisible(true);
@@ -73,6 +74,7 @@ public class StructPanel extends JPanel {
 				dir += 4;
 				dir %= 8;
 				loadFromFileObject.setUsersCatalogPath(filename);
+				setupBoard();
 				setupDisplayPanel();
 				setupLayout();
 				setVisible(true);
