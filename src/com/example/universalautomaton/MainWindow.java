@@ -10,8 +10,8 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 public class MainWindow {
-	private int rows;
-	private int cols;
+	private int rows = 12;
+	private int cols = 12;
 	private int cellSideSize;
 	private byte chosenGame;
 	private int numOfGens;	//liczba generacji nazwa n jest tragiczna ... zwlaszcza dla tak waznej zmiennej
@@ -133,9 +133,11 @@ public class MainWindow {
 		startBtn = new JButton(startIcon);
 		pauseBtn = new JButton(pauseIcon);
 		styleButtons();
-		rowsTA = new JTextField("10", 1); 
-		columnsTA = new JTextField("10", 1);
+		rowsTA = new JTextField(Integer.toString(rows-2), 1); 
+		columnsTA = new JTextField(Integer.toString(cols-2), 1);
 		numOfGensTA = new JTextField("", 1);
+		if (!isNumOfGensFinite)
+			numOfGensTA.setText(Integer.toString(numOfGens));
 		rowsLabel = new JLabel("  rows:");
 		columnsLabel = new JLabel("columns:");
 		numOfGensLabel = new JLabel("no. of generations:");
@@ -321,6 +323,8 @@ public class MainWindow {
 			loadFromFileObject.setUsersCatalogPath(chooseFileToLoadFC.getSelectedFile().getAbsolutePath());
 			initBoard();
 			buildDisplayPanel();
+			rowsTA.setText(Integer.toString(rows-2));
+			columnsTA.setText(Integer.toString(cols-2));
 			mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			mainWindow.setVisible(true);
 		}
