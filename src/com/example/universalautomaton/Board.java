@@ -79,7 +79,7 @@ public class Board {
 						new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow + (rows-2)/availableThreads).run();
 						previousStartingRow += (rows-2)/availableThreads;
 					}
-					new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow + 1 + (rows-2) % availableThreads).run();
+					new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow + (rows-2)/availableThreads + (rows-2) % availableThreads).run();
 				}
 				else if((rows-2) % availableThreads == 0)
 				{
