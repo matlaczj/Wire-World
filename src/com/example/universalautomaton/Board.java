@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class Board {
 	private int rows;
@@ -60,13 +61,15 @@ public class Board {
 	
 	public void updateBoardOrCalculateNextState(boolean isUpdating) {
 		int availableThreads = Runtime.getRuntime().availableProcessors();
+		ArrayList<BoardThread> boardThreadsArrayList = new ArrayList<>();
 			if(rows-2 < availableThreads)
 			{
 				int previousStartingRow = 1;
 				for(int i=0; i<rows-2; i++)
 				{
-					new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow+1).run();
+					boardThreadsArrayList.add(new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow+1));
 					previousStartingRow += 1;
+					boardThreadsArrayList.get(boardThreadsArrayList.size()-1).start();
 				}
 			}
 			else if(rows-2 > availableThreads) 
@@ -76,8 +79,9 @@ public class Board {
 				{
 					for(int i=0; i<availableThreads-1; i++)
 					{
-						new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow + (rows-2)/availableThreads).run();
+						boardThreadsArrayList.add(new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow + (rows-2)/availableThreads));
 						previousStartingRow += (rows-2)/availableThreads;
+						boardThreadsArrayList.get(boardThreadsArrayList.size()-1).start();
 					}
 					new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow + (rows-2)/availableThreads + (rows-2) % availableThreads).run();
 				}
@@ -85,8 +89,9 @@ public class Board {
 				{
 					for(int i=0; i<availableThreads; i++)
 					{
-						new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow + (rows-2)/availableThreads).run();
+						boardThreadsArrayList.add(new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow + (rows-2)/availableThreads));
 						previousStartingRow += (rows-2)/availableThreads;
+						boardThreadsArrayList.get(boardThreadsArrayList.size()-1).start();
 					}
 				}
 			}
@@ -95,10 +100,18 @@ public class Board {
 				int previousStartingRow = 1;
 				for(int i=0; i<availableThreads; i++)
 				{
-					new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow+1).run();
+					boardThreadsArrayList.add(new BoardThread(isUpdating, chosenGame, rows, cols, this, previousStartingRow, previousStartingRow+1));
 					previousStartingRow += 1;
+					boardThreadsArrayList.get(boardThreadsArrayList.size()-1).start();
 				}
 			}
+			try {
+				for(BoardThread boardThread : boardThreadsArrayList)
+					boardThread.join();
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+			
 		}
 
 	public void addStruct(String name, int x, int y, byte dirOrigin) throws FileNotFoundException {
