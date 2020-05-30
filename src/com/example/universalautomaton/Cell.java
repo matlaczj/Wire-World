@@ -43,7 +43,7 @@ public class Cell extends JButton {
 		else if(state == C.TAIL)
 			this.setBackground(Color.RED);
 		else if(state == C.PADD) 
-			this.setVisible(false);
+			this.setVisible(false); //nie widac ramki
 		
 	}
 	

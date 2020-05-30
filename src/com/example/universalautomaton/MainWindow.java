@@ -14,6 +14,7 @@ public class MainWindow {
 	private int cols = 22;
 	private int cellSideSize;
 	private byte chosenGame;
+	private String currentDisplayPanel;
 	private int numOfGens;	//liczba generacji nazwa n jest tragiczna ... zwlaszcza dla tak waznej zmiennej
 	private boolean isNumOfGensFinite = true; //czy ma isc w nieskonczonosc, dobre nazewnictwo zgodne z przyjetymi wczesniej zasadami
 	private SaveBoardToFile saveToFileObject;
@@ -22,6 +23,7 @@ public class MainWindow {
 	JFrame mainWindow;
 	private JPanel controlPanel;
 	private JPanel displayPanel;
+	LiteDisplayPanel liteDisplayPanel;
 	private StructPanel[] structPanels;
 	private Board board;
 	
@@ -67,7 +69,10 @@ public class MainWindow {
 	
 	private ComponentAdapter componentAdapter = new ComponentAdapter(){  
         public void componentResized(ComponentEvent evt) {
-        	buildDisplayPanel();
+        	if(currentDisplayPanel.equals("heavy"))
+        		buildDisplayPanel();
+        	else 
+				buildLiteDisplayPanel();
 			mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			mainWindow.setVisible(true);
         }
@@ -179,6 +184,7 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				buildChoiceWindow();
 				animationTimer.stop();
+				mainWindow.setVisible(true);
 			}
 		});
 		startBtn.addActionListener(new ActionListener() { //postanowilem przeniesc tutaj te Listenery poniewaz chcialem aby zmienne nie byly static a jednoczesnie nie chcialem wszystkiego pogmatwac
@@ -193,13 +199,16 @@ public class MainWindow {
 					} catch (NumberFormatException e1) {
 						isNumOfGensFinite = true;
 					}
+				buildLiteDisplayPanel();
 				animationTimer.start();
+				mainWindow.setVisible(true);
 			}
 		});
 		pauseBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				animationTimer.stop();
+				buildDisplayPanel();
 			}
 		});
 		speedSlider.addChangeListener(new ChangeListener() {
@@ -312,7 +321,23 @@ public class MainWindow {
 		controlPanelHeight = controlPanel.getHeight();
 	}
 	
+	private void buildLiteDisplayPanel() { //wywolane po wcisnieciu przycisku start
+		currentDisplayPanel = "lite";
+		displayPanel.removeAll();
+		displayPanel.repaint();
+		displayPanel.setLayout(new BorderLayout());
+		displayPanel.setPreferredSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		displayPanel.setMinimumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		displayPanel.setMaximumSize(new Dimension(cellSideSize*cols,cellSideSize*rows));
+		
+		liteDisplayPanel = new LiteDisplayPanel(board, cellSideSize);
+		displayPanel.add(liteDisplayPanel, BorderLayout.CENTER);
+		
+		displayPanel.setVisible(true);
+	}
+	
 	private void buildDisplayPanel() { 
+		currentDisplayPanel = "heavy";
 		displayPanel.removeAll();
 		displayPanel.setSize(mainWindow.getWidth() - 15, mainWindow.getHeight() - controlPanelHeight - 15);
 		
@@ -376,9 +401,9 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				if (isNumOfGensFinite || numOfGens>0 ) {
 					board.setChosenGame(chosenGame); //by miec pewnosc ze jest tam aktualna gra
-					if (chosenGame == C.GOL)
-						board.updateBoardOrCalculateNextState(false); //if nie potrzebny bo metoda i tak wie co ma liczyc znajac chosenGame
-					else if (chosenGame == C.WW)
+					//if (chosenGame == C.GOL)
+						//board.updateBoardOrCalculateNextState(false); //if nie potrzebny bo metoda i tak wie co ma liczyc znajac chosenGame
+					//else if (chosenGame == C.WW)
 						board.updateBoardOrCalculateNextState(false);
 					board.updateBoardOrCalculateNextState(true);
 					if (!isNumOfGensFinite) {
@@ -386,6 +411,7 @@ public class MainWindow {
 						numOfGensTA.setText(Integer.toString(numOfGens));
 					}
 //					saveToFileObject.saveBoardToFile(); //obecnie zapisuje kazdy nowy stan
+					liteDisplayPanel.updateUI();
 				}
 			}
 		});
