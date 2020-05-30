@@ -116,7 +116,7 @@ public class StructPanel extends JPanel {
 	
 	private void setupBoard() {
 		board = loadFromFileObject.loadBoardFromFile("", dir);
-		board.setActionListener(new ActionListener() {
+		board.setListeners(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String[] position = e.getActionCommand().split(" ");

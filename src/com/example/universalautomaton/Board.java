@@ -133,7 +133,7 @@ public class Board {
 		this.chosenGame = chosenGame;
 	}
 	
-	public void setActionListener(ActionListener l) {
+	public void setListeners(ActionListener l) {
 		for(int i=0; i<rows; i++)
 			for(int j=0; j<cols; j++)
 			{

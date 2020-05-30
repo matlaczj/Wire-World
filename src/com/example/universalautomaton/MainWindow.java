@@ -474,7 +474,7 @@ public class MainWindow {
     }
 
 	public void startStructListener(String filename, int i, int j, byte dir) {
-		board.setActionListener(new ActionListener() {
+		board.setListeners(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = new File(filename);

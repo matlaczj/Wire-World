@@ -15,7 +15,7 @@ public class BoardDragListener implements MouseListener{
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+		;
 	}
 
 	@Override
