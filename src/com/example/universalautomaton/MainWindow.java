@@ -274,7 +274,8 @@ public class MainWindow {
 		structsBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				buildStructsWindow();
+				if(currentDisplayPanel.equals("heavy")) // wejscie do structs w stanie lite  wyjscie z niego powoduje animacje w stanie heavy czyli lag i wywalenie wiec zablokowalem ten przycisk jesli sie wpierw nie zatrzyma animacji
+					buildStructsWindow();
 			}
 		});
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -419,8 +420,13 @@ public class MainWindow {
 	
 	private void initBoard() {
 		board = loadFromFileObject.loadBoardFromFile("notafile.wire"); 
-		if(board == null)
+		if(board == null) {
+			if(Integer.parseInt(rowsTA.getText()) > 200) //jesli user poda duze rozmiary to zostana one zmniejszone do bezpiecznych
+				rowsTA.setText("150");
+			if(Integer.parseInt(columnsTA.getText()) > 200)
+				columnsTA.setText("150");
 			board = new Board(Integer.parseInt(rowsTA.getText())+2, Integer.parseInt(columnsTA.getText())+2, chosenGame); // +2 dla paddingu
+		}
 		rows = board.getRows(); 
 		cols = board.getCols();
 		saveToFileObject = new SaveBoardToFile(board, chosenGame);

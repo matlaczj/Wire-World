@@ -14,7 +14,6 @@ public class LiteDisplayPanel extends JPanel{
 	
 	public LiteDisplayPanel(Board board, int cellSideSize) {
 		super();
-		//setPreferredSize(getParent().getSize());
 		this.board = board;
 		this.cellsSideSize = cellSideSize;
 		this.rows = board.getRows();

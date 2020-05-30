@@ -43,6 +43,7 @@ public class Board {
 				if(i==0 || j==0 || i==rows-1 || j==cols-1)
 				{
 					board[i][j] = new Cell(C.PADD, C.PADD);
+					board[i][j].setVisible(false);
 					continue;
 				}
 				board[i][j] = new Cell(C.OFF, C.OFF);
