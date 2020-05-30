@@ -18,15 +18,19 @@ public class Cell extends JButton {
 		return state;
 	}
 	public void setState(byte state) { 
-		this.state = state;
-		this.updateColorToMatchState(); //kolor sam sie uaktualnia
+		if(this.state != state) {
+			this.state = state;
+			this.updateColorToMatchState(); //kolor sam sie uaktualnia
+		}
 	}
 	public void setNextState(byte nextState) {
 		this.nextState = nextState;
 	}
 	public void updateState() {
-		this.state = this.nextState;
-		this.updateColorToMatchState();
+		if(state != nextState) {
+			this.state = this.nextState;
+			this.updateColorToMatchState();
+		}
 	}
 	public void updateColorToMatchState() {
 		if(state == C.OFF)
@@ -37,8 +41,9 @@ public class Cell extends JButton {
 			this.setBackground(Color.BLUE);
 		else if(state == C.TAIL)
 			this.setBackground(Color.RED);
-		else if(state == C.PADD) 
-			this.setBackground(Color.GREEN);
+		//else if(state == C.PADD) 
+			//this.setBackground(Color.GREEN);
+		
 	}
 	
 }
