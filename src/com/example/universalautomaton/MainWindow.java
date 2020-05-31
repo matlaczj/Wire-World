@@ -86,6 +86,8 @@ public class MainWindow {
 			startBtn.removeActionListener(startListener);
 			startBtn.setIcon(pauseIcon);
 			startBtn.addActionListener(pauseListener);
+			rowsTA.addActionListener(pauseListener);
+			columnsTA.addActionListener(pauseListener);
 			mainWindow.setVisible(true);
 		}
 	};
@@ -95,6 +97,8 @@ public class MainWindow {
 		public void actionPerformed(ActionEvent e) {
 			animationTimer.stop();
 			startBtn.removeActionListener(pauseListener);
+			rowsTA.removeActionListener(pauseListener);
+			columnsTA.removeActionListener(pauseListener);
 			startBtn.setIcon(startIcon);
 			startBtn.addActionListener(startListener);
 			buildDisplayPanel();
