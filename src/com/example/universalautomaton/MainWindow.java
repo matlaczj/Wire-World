@@ -204,7 +204,7 @@ public class MainWindow {
 		columnsLabel = new JLabel("columns:");
 		numOfGensLabel = new JLabel("no. of generations:");
 		speedLabel = new JLabel("  animation speed:");
-		speedSlider = new JSlider(1, 20, 10);
+		speedSlider = new JSlider(1, 100, 10);
 		currentSpeedLabel = new JLabel("10");
 		chooseFileToLoadBtn = new JButton("load state");
 		chooseFileToSaveBtn = new JButton("save as...");
