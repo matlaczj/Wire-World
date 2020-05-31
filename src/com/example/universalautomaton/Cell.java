@@ -3,9 +3,9 @@ package com.example.universalautomaton;
 import java.awt.Color;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 
 public class Cell extends JButton {
+	private static final long serialVersionUID = 1L;
 	// private static final long serialVersionUID = -7309940893358748305L;
 	private byte state;
 	private byte nextState;

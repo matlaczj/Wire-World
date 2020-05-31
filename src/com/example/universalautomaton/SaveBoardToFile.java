@@ -32,10 +32,10 @@ public class SaveBoardToFile {
 
 		legend = "legend to numbers:\r\n" + "	universal:\r\n" + "		OFF = 0\r\n" + "		ON = 1\r\n"
 				+ "	for WW only:\r\n" + "		HEAD = 2\r\n" + "		TAIL = 3";
-		golSavedStatesCatalogPath = "src" + pathSeparator + "output_files" + pathSeparator + "gameoflife"
+		golSavedStatesCatalogPath = "output_files" + pathSeparator + "gameoflife"
 				+ pathSeparator + "output"; // kiedys bedzie mozna ja wybrac dowolna w gui
 		golSavedStatesExtension = ".life";
-		wwSavedStatesCatalogPath = "src" + pathSeparator + "output_files" + pathSeparator + "wireworld" + pathSeparator
+		wwSavedStatesCatalogPath = "output_files" + pathSeparator + "wireworld" + pathSeparator
 				+ "output";
 		wwSavedStatesExtension = ".wire";
 	}

@@ -454,14 +454,14 @@ public class MainWindow {
 	}
 
 	private void initIcons() {
-		homeIcon = new ImageIcon("src" + pathSeparator + "icons" + pathSeparator + "home_icon.png");
-		startIcon = new ImageIcon("src" + pathSeparator + "icons" + pathSeparator + "start_icon.png");
-		pauseIcon = new ImageIcon("src" + pathSeparator + "icons" + pathSeparator + "pause_icon.png");
-		structsIcon = new ImageIcon("src" + pathSeparator + "icons" + pathSeparator + "structs_icon.png");
-		saveIcon = new ImageIcon("src" + pathSeparator + "icons" + pathSeparator + "save_icon.png");
-		rotateIcon = new ImageIcon("src" + pathSeparator + "icons" + pathSeparator + "rotate_icon.png");
-		mirrorXIcon = new ImageIcon("src" + pathSeparator + "icons" + pathSeparator + "mirrorx_icon.png");
-		mirrorYIcon = new ImageIcon("src" + pathSeparator + "icons" + pathSeparator + "mirrory_icon.png");
+		homeIcon = new ImageIcon("icons" + pathSeparator + "home_icon.png");
+		startIcon = new ImageIcon("icons" + pathSeparator + "start_icon.png");
+		pauseIcon = new ImageIcon("icons" + pathSeparator + "pause_icon.png");
+		structsIcon = new ImageIcon("icons" + pathSeparator + "structs_icon.png");
+		saveIcon = new ImageIcon("icons" + pathSeparator + "save_icon.png");
+		rotateIcon = new ImageIcon("icons" + pathSeparator + "rotate_icon.png");
+		mirrorXIcon = new ImageIcon("icons" + pathSeparator + "mirrorx_icon.png");
+		mirrorYIcon = new ImageIcon("icons" + pathSeparator + "mirrory_icon.png");
 	}
 
 	public int getCurrentSpeedLabel() {
@@ -481,10 +481,10 @@ public class MainWindow {
 		File folder;
 		List<String> filenames = new ArrayList<>();
 		if (chosenGame == C.WW) {
-			folder = new File("src" + pathSeparator + "structures" + pathSeparator + "wireworld");
+			folder = new File("structures" + pathSeparator + "wireworld");
 			search(".*" + pathSeparator + ".wire", folder, filenames);
 		} else if (chosenGame == C.GOL) {
-			folder = new File("src" + pathSeparator + "structures" + pathSeparator + "gameoflife");
+			folder = new File("structures" + pathSeparator + "gameoflife");
 			search(".*" + pathSeparator + ".life", folder, filenames);
 		}
 		structPanels = new StructPanel[filenames.size()];
