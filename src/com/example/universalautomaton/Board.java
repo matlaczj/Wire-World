@@ -15,8 +15,13 @@ public class Board {
 	private BoardClickListener bcl;
 	private BoardDragListener bdl;
 	private ActionListener tmpl;
+	private String pathSeparator;
 	
 	public Board(int rows, int cols, byte chosenGame) {
+		if(System.getProperty("os.name").toLowerCase().equals("mac"))
+			pathSeparator = "/";
+		else 
+			pathSeparator = "\\";
 		this.rows = rows;
 		this.cols = cols;
 		this.chosenGame = chosenGame;
@@ -124,9 +129,9 @@ public class Board {
 		byte dir = (byte) (mir*4 + (Directions.getStructDirection(direction) + dirOrigin) % 4);
 		fileLoader = new LoadBoardFromFile(chosenGame);
 		if (chosenGame == C.WW)
-			file = new File("src\\structures\\wireworld\\" + name + ".wire");
+			file = new File("src"+pathSeparator+"structures"+pathSeparator+"wireworld"+pathSeparator+""+ name + ".wire");
 		else if (chosenGame == C.GOL)
-			file = new File("src\\structures\\gameoflife\\" + name + ".life");
+			file = new File("src"+pathSeparator+"structures"+pathSeparator+"gameoflife"+pathSeparator+""+ name + ".life");
 		fileLoader.loadStructFromFile(this, file, x, y, dir);
 	}
 	

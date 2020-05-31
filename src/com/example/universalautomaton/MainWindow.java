@@ -156,10 +156,20 @@ public class MainWindow {
 	}
 	
 	private void buildControlPanel() {
-		goHomeBtn = new JButton(homeIcon);
-		structsBtn = new JButton(structsIcon);
-		startBtn = new JButton(startIcon);
-		pauseBtn = new JButton(pauseIcon);
+		if(osName.equals("mac")) {
+			goHomeBtn = new JButton("home");
+			structsBtn = new JButton("structs");
+			startBtn = new JButton("start");
+			pauseBtn = new JButton("pause");
+			saveBtn = new JButton("save");
+		}
+		else {
+			goHomeBtn = new JButton(homeIcon);
+			structsBtn = new JButton(structsIcon);
+			startBtn = new JButton(startIcon);
+			pauseBtn = new JButton(pauseIcon);
+			saveBtn = new JButton(saveIcon);
+		}
 		rowsTA = new JTextField(Integer.toString(rows-2), 1); 
 		columnsTA = new JTextField(Integer.toString(cols-2), 1);
 		numOfGensTA = new JTextField("", 1);
@@ -172,7 +182,6 @@ public class MainWindow {
 		speedSlider = new JSlider(1,20,10);
 		currentSpeedLabel = new JLabel("10");
 		chooseFileToLoadBtn = new JButton("load state");
-		saveBtn = new JButton(saveIcon);
 		chooseFileToSaveBtn = new JButton("save as...");
 		styleButtons();
 		
@@ -281,7 +290,7 @@ public class MainWindow {
 		structsBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(currentDisplayPanel.equals("heavy")) // wejscie do structs w stanie lite  wyjscie z niego powoduje animacje w stanie heavy czyli lag i wywalenie wiec zablokowalem ten przycisk jesli sie wpierw nie zatrzyma animacji
+				if(currentDisplayPanel.equals("heavy") && !osName.equals("mac")) // wejscie do structs w stanie lite  wyjscie z niego powoduje animacje w stanie heavy czyli lag i wywalenie wiec zablokowalem ten przycisk jesli sie wpierw nie zatrzyma animacji
 					buildStructsWindow();
 			}
 		});
