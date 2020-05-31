@@ -486,10 +486,10 @@ public class MainWindow {
 		List<String> filenames = new ArrayList<>();
 		if (chosenGame == C.WW) {
 			folder = new File("structures" + pathSeparator + "wireworld");
-			search(".*" + pathSeparator + ".wire", folder, filenames);
+			search(".*\\.wire", folder, filenames);
 		} else if (chosenGame == C.GOL) {
 			folder = new File("structures" + pathSeparator + "gameoflife");
-			search(".*" + pathSeparator + ".life", folder, filenames);
+			search(".*\\.life", folder, filenames);
 		}
 		structPanels = new StructPanel[filenames.size()];
 		int i = 0;
