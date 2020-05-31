@@ -25,10 +25,7 @@ public class SaveBoardToFile {
 	public SaveBoardToFile(Board board, byte chosenGame) {
 		this.board = board;
 		this.chosenGame = chosenGame;
-		if (System.getProperty("os.name").toLowerCase().equals("mac"))
-			pathSeparator = "/";
-		else
-			pathSeparator = "\\";
+		pathSeparator = File.separator;
 
 		legend = "legend to numbers:\r\n" + "	universal:\r\n" + "		OFF = 0\r\n" + "		ON = 1\r\n"
 				+ "	for WW only:\r\n" + "		HEAD = 2\r\n" + "		TAIL = 3";
