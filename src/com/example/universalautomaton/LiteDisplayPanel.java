@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 public class LiteDisplayPanel extends JPanel{
+	private static final long serialVersionUID = 1L;
 	Board board;
 	int rows;
 	int cols;
@@ -24,10 +25,13 @@ public class LiteDisplayPanel extends JPanel{
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		
-		for(int j=0, l=1; j<(cols-2)*cellsSideSize; j+=cellsSideSize, l++)
-			for(int i=0, k=1; i<(rows-2)*cellsSideSize; i+=cellsSideSize, k++)
+		for(int j=0, l=0; j<(cols-1)*cellsSideSize; j+=cellsSideSize, l++)
+			for(int i=0, k=0; i<(rows-1)*cellsSideSize; i+=cellsSideSize, k++)
 			{
-				if(board.getCell(k, l).getState() == C.OFF) {
+				if(board.getCell(k, l).getState() == C.PADD) {
+					continue;
+				}
+				else if(board.getCell(k, l).getState() == C.OFF) {
 					g2d.setPaint(Color.BLACK);
 				}
 				else if(board.getCell(k, l).getState() == C.ON) {
