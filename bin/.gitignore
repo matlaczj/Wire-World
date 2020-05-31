@@ -1,8 +1,2 @@
 *.class
-/.classpath
-/.gitignore
-/.project
 /com/
-/icons/
-/output_files/
-/structures/

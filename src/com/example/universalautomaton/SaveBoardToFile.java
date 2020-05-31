@@ -7,6 +7,7 @@ public class SaveBoardToFile {
 	private Board board;
 	private byte chosenGame = C.GOL;
 	private String legend;
+	private String pathSeparator;
 	
 	private String golSavedStatesCatalogPath;
 	private String wwSavedStatesCatalogPath;
@@ -23,6 +24,11 @@ public class SaveBoardToFile {
 	public SaveBoardToFile(Board board, byte chosenGame) {
 		this.board = board;
 		this.chosenGame = chosenGame;
+		if(System.getProperty("os.name").toLowerCase().equals("mac"))
+			pathSeparator = "/";
+		else 
+			pathSeparator = "\\";
+		
 		legend = "legend to numbers:\r\n" + 
 				"	universal:\r\n" + 
 				"		OFF = 0\r\n" + 
@@ -30,9 +36,9 @@ public class SaveBoardToFile {
 				"	for WW only:\r\n" + 
 				"		HEAD = 2\r\n" + 
 				"		TAIL = 3";
-		golSavedStatesCatalogPath = "src\\output_files\\gameoflife\\output"; //kiedys bedzie mozna ja wybrac dowolna w gui
+		golSavedStatesCatalogPath = "src" + pathSeparator + "output_files" + pathSeparator + "gameoflife" + pathSeparator + "output"; //kiedys bedzie mozna ja wybrac dowolna w gui
 		golSavedStatesExtension = ".life";
-		wwSavedStatesCatalogPath = "src\\output_files\\wireworld\\output";
+		wwSavedStatesCatalogPath = "src" + pathSeparator + "output_files" + pathSeparator + "wireworld" + pathSeparator + "output";
 		wwSavedStatesExtension = ".wire";
 	}
 	

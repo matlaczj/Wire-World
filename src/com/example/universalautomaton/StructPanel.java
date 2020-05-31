@@ -7,6 +7,7 @@ import javax.swing.*;
 
 public class StructPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private String pathSeparator;
 	private MainWindow parent;
 	private JLabel nameLabel;
 	private JButton rotateBtn;
@@ -28,6 +29,11 @@ public class StructPanel extends JPanel {
 	
 	public StructPanel(String filename, int count, MainWindow mainWindow) {
 		super();
+		if(System.getProperty("os.name").toLowerCase().equals("mac"))
+			pathSeparator = "/";
+		else {
+			pathSeparator = "\\";
+		}
 		this.filename = filename;
 		this.count = count;
 		this.count += 6;
@@ -45,9 +51,9 @@ public class StructPanel extends JPanel {
 	}	
 
 	private void parseName(String filename) {
-		String[] directories = filename.split("\\\\");
+		String[] directories = filename.split(pathSeparator+""+pathSeparator);
 		String file = directories[directories.length - 1];
-		name = file.split("\\.")[0];
+		name = file.split(pathSeparator+".")[0];
 	}
 	
 	private void setupButtons() {

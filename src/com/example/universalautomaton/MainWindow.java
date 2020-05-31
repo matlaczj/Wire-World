@@ -14,6 +14,8 @@ public class MainWindow {
 	private int cols = 22;
 	private int cellSideSize;
 	private byte chosenGame;
+	private String osName;
+	private String pathSeparator;
 	private String currentDisplayPanel;
 	private int numOfGens;	//liczba generacji nazwa n jest tragiczna ... zwlaszcza dla tak waznej zmiennej
 	private boolean isNumOfGensFinite = true; //czy ma isc w nieskonczonosc, dobre nazewnictwo zgodne z przyjetymi wczesniej zasadami
@@ -79,6 +81,11 @@ public class MainWindow {
 	};
 	
 	public MainWindow() {
+		osName = System.getProperty("os.name").toLowerCase();
+		if(osName.equals("mac"))
+			pathSeparator = "/";
+		else 
+			pathSeparator = "\\";
 		initIcons(); //pozostawiam tutaj gdybysmy chcieli dac ikony na okno wyboru gry, inaczej dalbym na poczatek buildControlPanel
 		mainWindow = new JFrame("Uniwersalny automat komorkowy");
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -434,14 +441,14 @@ public class MainWindow {
 	}
 	
 	private void initIcons() {
-		homeIcon = new ImageIcon("src\\icons\\home_icon.png");
-		startIcon = new ImageIcon("src\\icons\\start_icon.png");
-		pauseIcon = new ImageIcon("src\\icons\\pause_icon.png");
-		structsIcon = new ImageIcon("src\\icons\\structs_icon.png");
-		saveIcon = new ImageIcon("src\\icons\\save_icon.png");
-		rotateIcon = new ImageIcon("src\\icons\\rotate_icon.png");
-		mirrorXIcon = new ImageIcon("src\\icons\\mirrorx_icon.png");
-		mirrorYIcon = new ImageIcon("src\\icons\\mirrory_icon.png");
+		homeIcon = new ImageIcon("src"+pathSeparator+"icons"+pathSeparator+"home_icon.png");
+		startIcon = new ImageIcon("src"+pathSeparator+"icons"+pathSeparator+"start_icon.png");
+		pauseIcon = new ImageIcon("src"+pathSeparator+"icons"+pathSeparator+"pause_icon.png");
+		structsIcon = new ImageIcon("src"+pathSeparator+"icons"+pathSeparator+"structs_icon.png");
+		saveIcon = new ImageIcon("src"+pathSeparator+"icons"+pathSeparator+"save_icon.png");
+		rotateIcon = new ImageIcon("src"+pathSeparator+"icons"+pathSeparator+"rotate_icon.png");
+		mirrorXIcon = new ImageIcon("src"+pathSeparator+"icons"+pathSeparator+"mirrorx_icon.png");
+		mirrorYIcon = new ImageIcon("src"+pathSeparator+"icons"+pathSeparator+"mirrory_icon.png");
 	}
 	
 	public int getCurrentSpeedLabel() {
@@ -461,12 +468,12 @@ public class MainWindow {
 		File folder;
 		List<String> filenames = new ArrayList<>();
 		if (chosenGame == C.WW) {
-			folder = new File("src\\structures\\wireworld");
-			search(".*\\.wire", folder, filenames);
+			folder = new File("src"+pathSeparator+"structures"+pathSeparator+"wireworld");
+			search(".*"+pathSeparator+".wire", folder, filenames);
 		}
 		else if (chosenGame == C.GOL) {
-			folder = new File("src\\structures\\gameoflife");
-			search(".*\\.life", folder, filenames);
+			folder = new File("src"+pathSeparator+"structures"+pathSeparator+"gameoflife");
+			search(".*"+pathSeparator+".life", folder, filenames);
 		}
         structPanels = new StructPanel[filenames.size()];
         int i = 0;

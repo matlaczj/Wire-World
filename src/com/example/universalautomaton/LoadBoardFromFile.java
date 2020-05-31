@@ -8,10 +8,16 @@ public class LoadBoardFromFile {
 	private String usersCatalogPath = "";
 	private byte chosenGame = C.GOL;
 	private String buffer;
+	private String pathSeparator;
 	int fileRows, fileCols;
 	
 	public LoadBoardFromFile(byte chosenGame){
 		this.chosenGame = chosenGame;
+		if(System.getProperty("os.name").toLowerCase().equals("mac"))
+			pathSeparator = "/";
+		else {
+			pathSeparator = "\\";
+		}
 	}
 	
 	public Board loadBoardFromFile(String fileName) {
@@ -25,9 +31,9 @@ public class LoadBoardFromFile {
 				file = new File(usersCatalogPath);
 			}
 			else if(chosenGame == C.GOL)
-				file = new File("src\\output_files\\gameoflife\\" + fileName);
+				file = new File("src"+pathSeparator+"output_files"+pathSeparator+"gameoflife"+pathSeparator+""+fileName);
 			else if(chosenGame == C.WW)
-				file = new File("src\\output_files\\wireworld\\" + fileName);
+				file = new File("src"+pathSeparator+"output_files"+pathSeparator+"wireworld"+pathSeparator+""+ fileName);
 			else 
 				return null; //jesli wybierzemy nieprawidlowy plik dla wybranego typu gry
 			
