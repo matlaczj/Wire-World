@@ -14,6 +14,7 @@ public class Cell extends JButton {
 		super();
 		this.state = state;
 		this.nextState = nextState;
+		this.setOpaque(true);
 		updateColorToMatchState();
 	}
 
