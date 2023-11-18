@@ -1,6 +1,8 @@
 # Wire World
 
-<img src="https://th.bing.com/th/id/OIG.czlkGFZfN8SaPRioW8hw?pid=ImgGn" width="300" height="300" style="display: block; margin: auto;">
+<p align="center">
+  <img src="wire-world.png" alt="Logo" width="400"/>
+</p>
 
 ## Table of Contents
 - [Description](#description)
