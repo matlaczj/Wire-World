@@ -1,7 +1,7 @@
 # Wire World
 
 <p align="center">
-  <img src="wire-world.png" alt="Logo" width="400"/>
+  <img src="logo.png" alt="Logo" width="400"/>
 </p>
 
 ## Table of Contents
